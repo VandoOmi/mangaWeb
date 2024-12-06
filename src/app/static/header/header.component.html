@@ -3,22 +3,21 @@
         <a [routerLink]="['/home']">
             <img class="logo" src="">
         </a>
-        <a href="">Produkte</a>
-        <a href="">Über Uns</a>
+        <a [routerLink]="['/datenschutz']">Produkte</a>
         <select name="Über Uns" id="aboutUsDropdown">
             <option value="Impressum">
-                <a href="">Über Uns</a>
+                <a [routerLink]="['/impressum']">Impressum</a>
             </option>
             <option value="Datenschutz">
-                <a href="">Über Uns</a>
+                <a [routerLink]="['/datenschutz']">Datenschutz</a>
             </option>
             <option value="Team">
-                <a href="">Über Uns</a>
+                <a [routerLink]="['/team']">Team</a>
             </option>
         </select>
-        <a href="">Administration</a>
+        <a [routerLink]="['/administration']">Administration</a>
     </div>
     <div class="right">
-        <a href="">Login</a>
+        <a [routerLink]="['/login']">Login</a>
     </div>
 </div>

@@ -1,1 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+    font-family: tan-nimbus;
+    //src: url(public/fonts/tan-nimbus_freefontdownload_org.zip);
+}
+
+h1,h2,h3 {
+    font-family: tan-nimbus;
+}
+
+p {
+    font-family: Arial, Helvetica, sans-serif;
+}
