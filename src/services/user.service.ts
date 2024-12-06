@@ -6,7 +6,7 @@ import { CsvService } from './csv.service';
 })
 export class UserService {
 
-  static userCsv = 'src/csv/user.csv';
+  static userCsv = '../public/datenbank/user.csv';
   content: string;
 
   constructor(csvServ: CsvService)
