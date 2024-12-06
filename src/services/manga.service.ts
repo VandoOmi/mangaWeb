@@ -1,35 +1,60 @@
 import { Injectable } from '@angular/core';
 import { CsvService } from './csv.service';
+import e from 'express';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MangaService {
 
-  static MangaCsv = '../public/datenbank/manga.csv';
+  static mangaCsv = '../public/datenbank/manga.csv';
   content: string;
 
   constructor(csvServ: CsvService)
   { 
-    csvServ.init(MangaService.MangaCsv);
+    csvServ.init(MangaService.mangaCsv);
     this.content = csvServ.getContent();
   }
 
   async readMangaList(): Promise<Array<Manga>> {
     const lines = this.content.split("\n");
-    let MangaList: Array<Manga> = new Array<Manga>;
+    let mangaList: Array<Manga> = new Array<Manga>;
 
     lines.forEach(e => {
       const line = e.trim().split(";");
-      if(line.length === 4) {
-      MangaList.push(new Manga(line[0],line[1],line[2],line[3],line[4],line[5],line[6],line[7],Number(line[8]),Number(line[9]),Number(line[10]),line[11]))
+      if(line.length === 12) {
+      mangaList.push(new Manga(line[0],line[1],line[2],line[3],line[4],line[5],line[6],line[7],Number(line[8]),Number(line[9]),Number(line[10]),line[11]))
       }
     });
 
-    return MangaList;
+    return mangaList;
+  }
+
+  async readMangaId(id:string): Promise<Manga> {
+    const lines = this.content.split("\n");
+
+    lines.forEach(e => {
+      const line = e.trim().split(";");
+      if (line[0] === id) {
+        return new Manga(line[0],line[1],line[2],line[3],line[4],line[5],line[6],line[7],Number(line[8]),Number(line[9]),Number(line[10]),line[11])
+      }
+    });
+    throw new Error("Manga not found!");
+  }
+
+  async writeManga(manga:Manga) {
+    //soon™️
+  }
+
+  async updateManga(manga:Manga) {
+    //soon™️
+  }
+
+  async deleteManga(manga:Manga) {
+    //soon™️
   }
 }
-//isbn,nameEn,nameJr,nameJa,author,artist,desc,tags,volume,chapter,rating,cover
+
 export class Manga {
   private isbn:string;
   private nameEn:string;
