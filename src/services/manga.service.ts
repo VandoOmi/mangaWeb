@@ -46,11 +46,23 @@ export class MangaService {
     //soon™️
   }
 
+  async writeMangas(manga:Manga[]) {
+    //soon™️
+  }
+
   async updateManga(manga:Manga) {
     //soon™️
   }
 
-  async deleteManga(manga:Manga) {
+  async updateMangas(manga:Manga[]) {
+    //soon™️
+  }
+
+  async deleteManga(id:string) {
+    //soon™️
+  }
+
+  async deleteMangas(id:string[]) {
     //soon™️
   }
 }
