@@ -16,6 +16,10 @@ export class MangaService {
     this.content = csvServ.getContent();
   }
 
+  /**
+   * Get all manga
+   * @returns An array with all mangas in the database
+   */
   async readMangaList(): Promise<Array<Manga>> {
     const lines = this.content.split("\n");
     let mangaList: Array<Manga> = new Array<Manga>;
@@ -30,6 +34,12 @@ export class MangaService {
     return mangaList;
   }
 
+  /**
+   * Get a specified manga
+   * @param id The id of a specific manga you need
+   * @returns Manga
+   * @throws When the manga id you gave doesnt exist
+   */
   async readMangaId(id:string): Promise<Manga> {
     const lines = this.content.split("\n");
 
@@ -42,26 +52,53 @@ export class MangaService {
     throw new Error("Manga not found!");
   }
 
+  /**
+   * Add one manga to the database
+   * @param manga The manga you want to add
+   */
   async writeManga(manga:Manga) {
-    //soon™️
+    
   }
 
+  /**
+   * Add mangas to the database
+   * @param manga An arraylist of mangas to add
+   */
   async writeMangas(manga:Manga[]) {
     //soon™️
   }
 
+  /**
+   * Update an existing manga (CANNOT CHANGE ID)
+   * @param manga The updated manga
+   * @throws When manga is not found
+   */
   async updateManga(manga:Manga) {
     //soon™️
   }
-
+  /**
+   * Update multiple mangas (CANNOT CHANGE ID)
+   * @param manga The updated mangas
+   * @throws When mangas are not found
+   */
   async updateMangas(manga:Manga[]) {
     //soon™️
   }
 
+  /**
+   * Delete a manga
+   * @param id The id of manga you want to delete
+   * @throws When manga is not found
+   */
   async deleteManga(id:string) {
     //soon™️
   }
 
+  /**
+   * Delete multiple mangas
+   * @param id Array list of id's you want to delete
+   * @throws When a manga is not found and cancles the entire process
+   */
   async deleteMangas(id:string[]) {
     //soon™️
   }
