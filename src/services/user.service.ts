@@ -21,32 +21,46 @@ export class UserService {
 
     lines.forEach(e => {
       const line = e.trim().split(";");
-      if(line.length === 4) {
-      userList.push(new User(line[0],line[1],line[2],line[3]))
+      if(line.length === 3) {
+      userList.push(new User(line[0],line[1],line[2]))
       }
     });
 
     return userList;
+  }
+
+  async getUserById(id:string): Promise<User> {
+    let idInt = parseInt(id);
+    const lines = this.content.split("\n");
+    let userLine = lines[idInt];
+    /*let name:number; 
+    userLine.split(';')[1].split('').forEach(e => {
+      name += e.charCodeAt(0)
+    });
+    let role: number
+    userLine.split(';')[2].split('').forEach(e => {
+      role += e.charCodeAt(0)
+    });*/
+    return new User(userLine[0],userLine[1],userLine[2]);
+
+
   }
 }
 
 export class User {
   private id:string;
   private name:string;
-  private password:string;
   private role:string;
 
   constructor
   (
     id:string,
     name:string,
-    password:string,
     role:string
   )
   {
     this.id = id;
     this.name = name;
-    this.password = password;
     this.role = role;
 
     
