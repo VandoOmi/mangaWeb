@@ -8,6 +8,7 @@ import { CsvService } from './csv.service';
 export class MangaService {
 
   static mangaCsv = '../public/datenbank/manga.csv';
+  static mangaList: Array<Manga>;
   content: string;
 
   constructor(csvServ: CsvService)
@@ -46,7 +47,7 @@ export class MangaService {
         mangaList.push(manga)
     });
 
-    return mangaList;
+    return await mangaList;
   }
 
   /**
