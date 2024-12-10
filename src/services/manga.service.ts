@@ -107,9 +107,7 @@ export class MangaService {
 export class Manga {
   private _id: string;
   private _defaultTitle: string;
-  private _englishTitle: string[];
   private _germanTitle: string[];
-  private _originalTitle: string[];
   private _originalRomanjiTitle: string[];
   private _currentCover: string;
   private _description: string;
@@ -139,9 +137,7 @@ export class Manga {
   ) {
     this._id = id;
     this._defaultTitle = defaultTitle;
-    this._englishTitle = [];
     this._germanTitle = [];
-    this._originalTitle = [];
     this._originalRomanjiTitle = [];
     this._currentCover = currentCover	;
     this._description = description;
@@ -178,28 +174,12 @@ export class Manga {
       this._defaultTitle = value;
   }
 
-  get englishTitle(): string[] {
-      return this._englishTitle;
-  }
-
-  set englishTitle(value: string[]) {
-      this._englishTitle = value;
-  }
-
   get germanTitle(): string[] {
       return this._germanTitle;
   }
 
   set germanTitle(value: string[]) {
       this._germanTitle = value;
-  }
-
-  get originalTitle(): string[] {
-      return this._originalTitle;
-  }
-
-  set originalTitle(value: string[]) {
-      this._originalTitle = value;
   }
 
   get originalRomanjiTitle(): string[] {
