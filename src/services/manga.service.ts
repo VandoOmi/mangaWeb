@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CsvService } from './csv.service';
-import e from 'express';
+
 
 @Injectable({
   providedIn: 'root'
@@ -25,9 +25,9 @@ export class MangaService {
     let mangaList: Array<Manga> = new Array<Manga>;
 
     lines.forEach(e => {
-      const line = e.trim().split(";");
+      const line = e.trim().split(",");
       if(line.length === 12) {
-      mangaList.push(new Manga(line[0],line[1],line[2],line[3],line[4],line[5],line[6],line[7],Number(line[8]),Number(line[9]),Number(line[10]),line[11]))
+      mangaList.push(new Manga(line[0],stringToArray(line[1]),stringToArray(line[2]),stringToArray(line[3]),stringToArray(line[4]),stringToArray(line[5]),line[6].replace("/n", "\n"),stringToArray(line[7]),Number(line[8]),Number(line[9]),Number(line[10]),stringToArray(line[11])))
       }
     });
 
@@ -40,13 +40,13 @@ export class MangaService {
    * @returns Manga
    * @throws When the manga id you gave doesnt exist
    */
-  async readMangaId(id:string): Promise<Manga> {
+  async readMangaId(id:string): Promise<Manga> { 
     const lines = this.content.split("\n");
 
     lines.forEach(e => {
       const line = e.trim().split(";");
       if (line[0] === id) {
-        return new Manga(line[0],line[1],line[2],line[3],line[4],line[5],line[6],line[7],Number(line[8]),Number(line[9]),Number(line[10]),line[11])
+        return new Manga(line[0],stringToArray(line[1]),stringToArray(line[2]),stringToArray(line[3]),stringToArray(line[4]),stringToArray(line[5]),line[6],stringToArray(line[7]),Number(line[8]),Number(line[9]),Number(line[10]),stringToArray(line[11]))
       }
     });
     throw new Error("Manga not found!");
@@ -57,7 +57,7 @@ export class MangaService {
    * @param manga The manga you want to add
    */
   async writeManga(manga:Manga) {
-    
+    this.content
   }
 
   /**
@@ -105,32 +105,149 @@ export class MangaService {
 }
 
 export class Manga {
-  private isbn:string;
-  private nameEn:string;
-  private nameJr:string;
-  private nameJa:string;
-  private author:string;
-  private artist:string;
-  private desc:string;
-  private tags:string
-  private volume:number;
-  private chapter:number;
-  private rating:number;
-  private cover:string;
+  private _isbn:string;
+  private _nameEn:string[];
+  private _nameJr:string[];
+  private _nameJa:string[];
+  private _author:string[];
+  private _artist:string[];
+  private _desc:string;
+  private _tags:string[];
+  private _volume:number;
+  private _chapter:number;
+  private _rating:number;
+  private _cover:string[];
 
-  constructor (isbn:string, nameEn:string, nameJr:string, nameJa:string, author:string, artist:string, desc:string, tags:string, volume:number, chapter:number, rating:number, cover:string )
+  constructor (
+    _isbn:string,
+    _nameEn:string[],
+    _nameJr:string[],
+    _nameJa:string[],
+    _author:string[],
+    _artist:string[],
+    _desc:string,
+    _tags:string[],
+    _volume:number,
+    _chapter:number,
+    _rating:number,
+    _cover:string[]
+  )
+
   {
-    this.isbn = isbn;
-    this.nameEn = nameEn;
-    this.nameJr = nameJr;
-    this.nameJa = nameJa;
-    this.author = author;
-    this.artist = artist;
-    this.desc = desc;
-    this.tags = tags;
-    this.volume = volume;
-    this.chapter = chapter;
-    this.rating = rating;
-    this.cover = cover;
+    this._isbn = _isbn;
+    this._nameEn = _nameEn;
+    this._nameJr = _nameJr;
+    this._nameJa = _nameJa;
+    this._author = _author;
+    this._artist = _artist;
+    this._desc = _desc;
+    this._tags = _tags;
+    this._volume = _volume;
+    this._chapter = _chapter;
+    this._rating = _rating;
+    this._cover = _cover;
   }
+
+  
+  public get isbn() : string {
+    return this._isbn;
+  }
+
+  
+  public get nameEn() : string[] {
+    return this._nameEn;
+  }
+
+  
+  public get nameJr() : string[] {
+    return this._nameJr;
+  }
+  
+  public get nameJa() : string[] {
+    return this._nameJa;
+  }
+  
+  public get author() : string[] {
+    return this._author;
+  }
+  
+  public get artist() : string[] {
+    return this._artist;
+  }
+  
+  public get desc() : string {
+    return this._desc;
+  }
+  
+  public get tags() : string[] {
+    return this._tags;
+  }
+  
+  public get volume() : number {
+    return this._volume;
+  }
+  
+  public get chapter() : number {
+    return this._chapter;
+  }
+  
+  public get rating() : number {
+    return this._rating;
+  }
+  
+  public get cover() : string[] {
+    return this._cover;
+  }
+  
+  public set isbn(v : string) {
+    this._isbn = v;
+  }
+  
+  public set nameEn(v : string[]) {
+    this._nameEn = v;
+  }
+  
+  public set nameJr(v : string[]) {
+    this._nameJr = v;
+  }
+  
+  public set nameJa(v : string[]) {
+    this._nameJa = v;
+  }
+  
+  public set author(v : string[]) {
+    this._author = v;
+  }
+  
+  public set artist(v : string[]) {
+    this._artist = v;
+  }
+  
+  public set desc(v : string) {
+    this._desc = v;
+  }
+  
+  public set tags(v : string[]) {
+    this._tags = v;
+  }
+  
+  public set volume(v : number) {
+    this._volume = v;
+  }
+  
+  public set chapter(v : number) {
+    this._chapter = v;
+  }
+  
+  public set rating(v : number) {
+    this._rating = v;
+  }
+  
+  public set cover(v : string[]) {
+    this._cover = v;
+  }
+}
+
+function stringToArray(input: string): string[] {
+  return input.split(',').map(item => item.trim());
 }
