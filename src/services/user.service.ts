@@ -62,7 +62,34 @@ export class User {
     this.id = id;
     this.name = name;
     this.role = role;
-
-    
   }
+
+  
+  public getId() : string {
+    return this.id;
+  }
+
+  
+  public setId(v : string) {
+    this.id = v;
+  }
+
+  public getName() : string {
+    return this.name;
+  }
+
+  
+  public setName(v : string) {
+    this.name = v;
+  }
+  
+  public getRole() : string {
+    return this.role;
+  }
+
+  
+  public setRole(v : string) {
+    this.role = v;
+  }
+  
 }
