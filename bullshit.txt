@@ -1,0 +1,1 @@
+//id defaultTitle germanTitle originalRomanjiTitle currentCover description contentRating tags ratingAverage releaseDate authors artists publicationStatus followers commentCount demographic originalLanguage lastVolume lastChapter allCovers ratingBayesian

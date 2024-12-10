@@ -25,10 +25,25 @@ export class MangaService {
     let mangaList: Array<Manga> = new Array<Manga>;
 
     lines.forEach(e => {
-      const line = e.trim().split(",");
-      if(line.length === 12) {
-      mangaList.push(new Manga(line[0],stringToArray(line[1]),stringToArray(line[2]),stringToArray(line[3]),stringToArray(line[4]),stringToArray(line[5]),line[6].replace("/n", "\n"),stringToArray(line[7]),Number(line[8]),Number(line[9]),Number(line[10]),stringToArray(line[11])))
-      }
+        const line = e.trim().split(",");
+        const manga = new Manga(line[0],line[1],line[4],line[5],Number(line[8]),line[16]);
+        manga.germanTitle = line[2].replace(`"`, ``).split(",");
+        manga.originalRomanjiTitle = line[3].replace(`"`, ``).split(",");
+        manga.contentRating = line[6];
+        manga.tags = line[7].replace(`"`, ``).split(",");
+        manga.ratingAverage = Number(line[8]);
+        manga.releaseDate = line[9];
+        manga.authors = line[10].replace(`"`, ``).split(",");
+        manga.artists = line[11].replace(`"`, ``).split(",");
+        manga.publicationStatus = line[12];
+        manga.followers = Number(line[13]);
+        manga.commentCount = Number(line[14]);
+        manga.demographic = line[15];
+        manga.lastVolume = Number(line[17]);
+        manga.lastChapter = Number(line[18]);
+        manga.allCovers = line[19].replace(`"`, ``).split(",");
+        manga.ratingBayesian = Number(line[20]);
+        mangaList.push(manga)
     });
 
     return mangaList;
@@ -41,14 +56,12 @@ export class MangaService {
    * @throws When the manga id you gave doesnt exist
    */
   async readMangaId(id:string): Promise<Manga> { 
-    const lines = this.content.split("\n");
-
-    lines.forEach(e => {
-      const line = e.trim().split(";");
-      if (line[0] === id) {
-        return new Manga(line[0],stringToArray(line[1]),stringToArray(line[2]),stringToArray(line[3]),stringToArray(line[4]),stringToArray(line[5]),line[6],stringToArray(line[7]),Number(line[8]),Number(line[9]),Number(line[10]),stringToArray(line[11]))
-      }
-    });
+    const mangaList = await this.readMangaList();
+    for (const manga of mangaList) {
+        if (manga.id === id) {
+            return manga;
+        }
+    }
     throw new Error("Manga not found!");
   }
 
@@ -105,57 +118,72 @@ export class MangaService {
 }
 
 export class Manga {
-  private _id: string;
-  private _defaultTitle: string;
-  private _germanTitle: string[];
-  private _originalRomanjiTitle: string[];
-  private _currentCover: string;
-  private _description: string;
-  private _contentRating: string;
-  private _tags: string[];
-  private _ratingAverage: number;
-  private _releaseDate: string;
-  private _authors: string[];
-  private _artists: string[];
-  private _publicationStatus: string;
-  private _followers: number;
-  private _commentCount: number;
-  private _demographic: string;
-  private _originalLanguage: string;
-  private _lastVolume: number;
-  private _lastChapter: number;
-  private _allCovers: string[];
-  private _ratingBayesian: number;
+  private _id: string; //0 .
+  private _defaultTitle: string; //1 .
+  private _germanTitle: string[]; //2
+  private _originalRomanjiTitle: string[]; //3
+  private _currentCover: string; //4 .
+  private _description: string; //5 .
+  private _contentRating: string; //6
+  private _tags: string[]; //7
+  private _ratingAverage: number; //8 .
+  private _releaseDate: string; //9
+  private _authors: string[]; //10
+  private _artists: string[]; //11
+  private _publicationStatus: string; //12
+  private _followers: number; //13
+  private _commentCount: number; //14
+  private _demographic: string; //15
+  private _originalLanguage: string; //16 .
+  private _lastVolume: number; //17
+  private _lastChapter: number; //18
+  private _allCovers: string[]; //19
+  private _ratingBayesian: number; //20
 
   constructor(
-    id:string,
-    defaultTitle:string,
-    currentCover:string,
-    description:string,
-    ratingAverage:number,
-    originalLanguage:string
+    id: string, //0 .
+    defaultTitle: string, //1 .
+    currentCover: string, //4 .
+    description: string, //5 .
+    ratingAverage: number, //8 .
+    originalLanguage: string, //16 .
+    germanTitle?: string[], //2
+    originalRomanjiTitle?: string[], //3
+    contentRating?: string, //6
+    tags?: string[], //7
+    releaseDate?: string, //9
+    authors?: string[], //10
+    artists?: string[], //11
+    publicationStatus?: string, //12
+    followers?: number, //13
+    commentCount?: number, //14
+    demographic?: string, //15
+    lastVolume?: number, //17
+    lastChapter?: number, //18
+    allCovers?: string[], //19
+    ratingBayesian?: number //20
   ) {
     this._id = id;
     this._defaultTitle = defaultTitle;
-    this._germanTitle = [];
-    this._originalRomanjiTitle = [];
-    this._currentCover = currentCover	;
+    this._germanTitle = germanTitle || [];
+    this._originalRomanjiTitle = originalRomanjiTitle || [];
+    this._currentCover = currentCover;
     this._description = description;
-    this._contentRating = '';
-    this._tags = [];
+    this._contentRating = contentRating || "";
+    this._tags = tags || [];
     this._ratingAverage = ratingAverage;
-    this._releaseDate = '';
-    this._authors = [];
-    this._artists = [];
-    this._publicationStatus = '';
-    this._followers = 0;
-    this._commentCount = 0;
-    this._demographic = '';
+    this._releaseDate = releaseDate || "";
+    this._authors = authors || [];
+    this._artists = artists ||[];
+    this._publicationStatus = publicationStatus || "";
+    this._followers = followers || 0;
+    this._commentCount = commentCount || 0;
+    this._demographic = demographic || "";
     this._originalLanguage = originalLanguage;
-    this._lastVolume = 0;
-    this._lastChapter = 0;
-    this._allCovers = [];
-    this._ratingBayesian = 0;
+    this._lastVolume = lastVolume || 0;
+    this._lastChapter = lastChapter || 0;
+    this._allCovers = allCovers || [];
+    this._ratingBayesian = ratingBayesian || 0;
   }
 
   get id(): string {
@@ -325,9 +353,4 @@ export class Manga {
   set ratingBayesian(value: number) {
       this._ratingBayesian = value;
   }
-}
-
-
-function stringToArray(input: string): string[] {
-  return input.split(',').map(item => item.trim());
 }
