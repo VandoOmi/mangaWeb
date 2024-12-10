@@ -8,7 +8,7 @@ import { CsvService } from './csv.service';
 export class MangaService {
 
   static mangaCsv = '../public/datenbank/manga.csv';
-  public static mangaList: Array<Manga>;
+  public mangaList?: Array<Manga>;
   private content: string;
 
   constructor(csvServ: CsvService)
