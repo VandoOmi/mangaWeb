@@ -9,7 +9,7 @@ export class MangaService {
 
   static mangaCsv = '../public/datenbank/manga.csv';
   public static mangaList: Array<Manga>;
-  content: string;
+  private content: string;
 
   constructor(csvServ: CsvService)
   { 
