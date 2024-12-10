@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-administraion',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './administraion.component.html',
   styleUrl: './administraion.component.scss'
 })
