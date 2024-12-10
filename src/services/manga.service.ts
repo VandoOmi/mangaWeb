@@ -105,148 +105,248 @@ export class MangaService {
 }
 
 export class Manga {
-  private _isbn:string;
-  private _nameEn:string[];
-  private _nameJr:string[];
-  private _nameJa:string[];
-  private _author:string[];
-  private _artist:string[];
-  private _desc:string;
-  private _tags:string[];
-  private _volume:number;
-  private _chapter:number;
-  private _rating:number;
-  private _cover:string[];
+  private _id: string;
+  private _defaultTitle: string;
+  private _englishTitle: string[];
+  private _germanTitle: string[];
+  private _originalTitle: string[];
+  private _originalRomanjiTitle: string[];
+  private _currentCover: string;
+  private _description: string;
+  private _contentRating: string;
+  private _tags: string[];
+  private _ratingAverage: number;
+  private _releaseDate: string;
+  private _authors: string[];
+  private _artists: string[];
+  private _publicationStatus: string;
+  private _followers: number;
+  private _commentCount: number;
+  private _demographic: string;
+  private _originalLanguage: string;
+  private _lastVolume: number;
+  private _lastChapter: number;
+  private _allCovers: string[];
+  private _ratingBayesian: number;
 
-  constructor (
-    _isbn:string,
-    _nameEn:string[],
-    _nameJr:string[],
-    _nameJa:string[],
-    _author:string[],
-    _artist:string[],
-    _desc:string,
-    _tags:string[],
-    _volume:number,
-    _chapter:number,
-    _rating:number,
-    _cover:string[]
-  )
-
-  {
-    this._isbn = _isbn;
-    this._nameEn = _nameEn;
-    this._nameJr = _nameJr;
-    this._nameJa = _nameJa;
-    this._author = _author;
-    this._artist = _artist;
-    this._desc = _desc;
-    this._tags = _tags;
-    this._volume = _volume;
-    this._chapter = _chapter;
-    this._rating = _rating;
-    this._cover = _cover;
+  constructor(
+    id:string,
+    defaultTitle:string,
+    currentCover:string,
+    description:string,
+    ratingAverage:number,
+    originalLanguage:string
+  ) {
+    this._id = id;
+    this._defaultTitle = defaultTitle;
+    this._englishTitle = [];
+    this._germanTitle = [];
+    this._originalTitle = [];
+    this._originalRomanjiTitle = [];
+    this._currentCover = currentCover	;
+    this._description = description;
+    this._contentRating = '';
+    this._tags = [];
+    this._ratingAverage = ratingAverage;
+    this._releaseDate = '';
+    this._authors = [];
+    this._artists = [];
+    this._publicationStatus = '';
+    this._followers = 0;
+    this._commentCount = 0;
+    this._demographic = '';
+    this._originalLanguage = originalLanguage;
+    this._lastVolume = 0;
+    this._lastChapter = 0;
+    this._allCovers = [];
+    this._ratingBayesian = 0;
   }
 
-  
-  public get isbn() : string {
-    return this._isbn;
+  get id(): string {
+      return this._id;
   }
 
-  
-  public get nameEn() : string[] {
-    return this._nameEn;
+  set id(value: string) {
+      this._id = value;
   }
 
-  
-  public get nameJr() : string[] {
-    return this._nameJr;
+  get defaultTitle(): string {
+      return this._defaultTitle;
   }
-  
-  public get nameJa() : string[] {
-    return this._nameJa;
+
+  set defaultTitle(value: string) {
+      this._defaultTitle = value;
   }
-  
-  public get author() : string[] {
-    return this._author;
+
+  get englishTitle(): string[] {
+      return this._englishTitle;
   }
-  
-  public get artist() : string[] {
-    return this._artist;
+
+  set englishTitle(value: string[]) {
+      this._englishTitle = value;
   }
-  
-  public get desc() : string {
-    return this._desc;
+
+  get germanTitle(): string[] {
+      return this._germanTitle;
   }
-  
-  public get tags() : string[] {
-    return this._tags;
+
+  set germanTitle(value: string[]) {
+      this._germanTitle = value;
   }
-  
-  public get volume() : number {
-    return this._volume;
+
+  get originalTitle(): string[] {
+      return this._originalTitle;
   }
-  
-  public get chapter() : number {
-    return this._chapter;
+
+  set originalTitle(value: string[]) {
+      this._originalTitle = value;
   }
-  
-  public get rating() : number {
-    return this._rating;
+
+  get originalRomanjiTitle(): string[] {
+      return this._originalRomanjiTitle;
   }
-  
-  public get cover() : string[] {
-    return this._cover;
+
+  set originalRomanjiTitle(value: string[]) {
+      this._originalRomanjiTitle = value;
   }
-  
-  public set isbn(v : string) {
-    this._isbn = v;
+
+  get currentCover(): string {
+      return this._currentCover;
   }
-  
-  public set nameEn(v : string[]) {
-    this._nameEn = v;
+
+  set currentCover(value: string) {
+      this._currentCover = value;
   }
-  
-  public set nameJr(v : string[]) {
-    this._nameJr = v;
+
+  get description(): string {
+      return this._description;
   }
-  
-  public set nameJa(v : string[]) {
-    this._nameJa = v;
+
+  set description(value: string) {
+      this._description = value;
   }
-  
-  public set author(v : string[]) {
-    this._author = v;
+
+  get contentRating(): string {
+      return this._contentRating;
   }
-  
-  public set artist(v : string[]) {
-    this._artist = v;
+
+  set contentRating(value: string) {
+      this._contentRating = value;
   }
-  
-  public set desc(v : string) {
-    this._desc = v;
+
+  get tags(): string[] {
+      return this._tags;
   }
-  
-  public set tags(v : string[]) {
-    this._tags = v;
+
+  set tags(value: string[]) {
+      this._tags = value;
   }
-  
-  public set volume(v : number) {
-    this._volume = v;
+
+  get ratingAverage(): number {
+      return this._ratingAverage;
   }
-  
-  public set chapter(v : number) {
-    this._chapter = v;
+
+  set ratingAverage(value: number) {
+      this._ratingAverage = value;
   }
-  
-  public set rating(v : number) {
-    this._rating = v;
+
+  get releaseDate(): string {
+      return this._releaseDate;
   }
-  
-  public set cover(v : string[]) {
-    this._cover = v;
+
+  set releaseDate(value: string) {
+      this._releaseDate = value;
+  }
+
+  get authors(): string[] {
+      return this._authors;
+  }
+
+  set authors(value: string[]) {
+      this._authors = value;
+  }
+
+  get artists(): string[] {
+      return this._artists;
+  }
+
+  set artists(value: string[]) {
+      this._artists = value;
+  }
+
+  get publicationStatus(): string {
+      return this._publicationStatus;
+  }
+
+  set publicationStatus(value: string) {
+      this._publicationStatus = value;
+  }
+
+  get followers(): number {
+      return this._followers;
+  }
+
+  set followers(value: number) {
+      this._followers = value;
+  }
+
+  get commentCount(): number {
+      return this._commentCount;
+  }
+
+  set commentCount(value: number) {
+      this._commentCount = value;
+  }
+
+  get demographic(): string {
+      return this._demographic;
+  }
+
+  set demographic(value: string) {
+      this._demographic = value;
+  }
+
+  get originalLanguage(): string {
+      return this._originalLanguage;
+  }
+
+  set originalLanguage(value: string) {
+      this._originalLanguage = value;
+  }
+
+  get lastVolume(): number {
+      return this._lastVolume;
+  }
+
+  set lastVolume(value: number) {
+      this._lastVolume = value;
+  }
+
+  get lastChapter(): number {
+      return this._lastChapter;
+  }
+
+  set lastChapter(value: number) {
+      this._lastChapter = value;
+  }
+
+  get allCovers(): string[] {
+      return this._allCovers;
+  }
+
+  set allCovers(value: string[]) {
+      this._allCovers = value;
+  }
+
+  get ratingBayesian(): number {
+      return this._ratingBayesian;
+  }
+
+  set ratingBayesian(value: number) {
+      this._ratingBayesian = value;
   }
 }
+
 
 function stringToArray(input: string): string[] {
   return input.split(',').map(item => item.trim());
