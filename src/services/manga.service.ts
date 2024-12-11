@@ -7,27 +7,30 @@ import { CsvService } from './csv.service';
 })
 export class MangaService {
 
-    static mangaCsv = 'public/datenbank/manga.csv';
-    static mangaList?: Array<Manga>;
-    content: string;
+    private mangaCsv = 'public/datenbank/manga.csv';
+    mangaList: Array<Manga> = [];
 
-    constructor(csvServ: CsvService)
+    constructor()
     { 
-        csvServ.init(MangaService.mangaCsv);
-        this.content = csvServ.getContent();
+        this.init()
     }
 
-    static async init() {
-        let mangaServ = new MangaService(new CsvService);
-        MangaService.mangaList = await mangaServ.readMangaList();
+    /**
+     * Initialistion
+     */
+    async init() 
+    {
+        let csvServ = new CsvService();
+        csvServ.init(this.mangaCsv);
+        this.mangaList = await this.readMangaList(csvServ.getContent());
     }
 
     /**
      * Get all manga
      * @returns An array with all mangas in the database
      */
-    async readMangaList(): Promise<Array<Manga>> {
-        const lines = this.content.split("\n");
+    async readMangaList(content: string): Promise<Array<Manga>> {
+        const lines = content.split("\n");
         let mangaList: Array<Manga> = new Array<Manga>;
 
         lines.forEach(e => {
@@ -62,8 +65,7 @@ export class MangaService {
      * @throws When the manga id you gave doesnt exist
      */
     async readMangaId(id:string): Promise<Manga> { 
-    const mangaList = await this.readMangaList();
-    for (const manga of mangaList) {
+    for (const manga of this.mangaList) {
         if (manga.id === id) {
             return manga;
         }
@@ -76,7 +78,7 @@ export class MangaService {
      * @param manga The manga you want to add
      */
     async writeManga(manga:Manga) {
-    this.content
+        // idk irgendwas halt
     }
 
     /**

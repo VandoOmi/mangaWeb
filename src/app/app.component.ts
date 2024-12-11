@@ -15,6 +15,5 @@ export class AppComponent {
   title = 'mangaWeb';
 
   constructor(mangaServ: MangaService) {
-    MangaService.init();
   }
 }

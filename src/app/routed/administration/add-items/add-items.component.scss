@@ -1,5 +1,11 @@
 div {
     display: flex;
+    flex-direction: column;
     height: screen;
     width: screen;
+    align-items: center;
+    .content {
+        display: flex;
+        flex-direction: row;
+    }
 }

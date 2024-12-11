@@ -8,7 +8,7 @@ export class CsvService
 {
 
   private csvPath!: URL;
-  private content!: string;
+  private content: string = '';
 
   constructor() { }
 
