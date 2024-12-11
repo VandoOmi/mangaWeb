@@ -7,56 +7,61 @@ import { CsvService } from './csv.service';
 })
 export class MangaService {
 
-  static mangaCsv = '../public/datenbank/manga.csv';
-  public static mangaList: Array<Manga>;
-  private content: string;
+    static mangaCsv = 'public/datenbank/manga.csv';
+    static mangaList?: Array<Manga>;
+    content: string;
 
-  constructor(csvServ: CsvService)
-  { 
-    csvServ.init(MangaService.mangaCsv);
-    this.content = csvServ.getContent();
-  }
+    constructor(csvServ: CsvService)
+    { 
+        csvServ.init(MangaService.mangaCsv);
+        this.content = csvServ.getContent();
+    }
 
-  /**
-   * Get all manga
-   * @returns An array with all mangas in the database
-   */
-  async readMangaList(): Promise<Array<Manga>> {
-    const lines = this.content.split("\n");
-    let mangaList: Array<Manga> = new Array<Manga>;
+    static async init() {
+        let mangaServ = new MangaService(new CsvService);
+        MangaService.mangaList = await mangaServ.readMangaList();
+    }
 
-    lines.forEach(e => {
-        const line = e.trim().split(",");
-        const manga = new Manga(line[0],line[1],line[4],line[5],Number(line[8]),line[16]);
-        manga.germanTitle = line[2].replace(`"`, ``).split(",");
-        manga.originalRomanjiTitle = line[3].replace(`"`, ``).split(",");
-        manga.contentRating = line[6];
-        manga.tags = line[7].replace(`"`, ``).split(",");
-        manga.ratingAverage = Number(line[8]);
-        manga.releaseDate = line[9];
-        manga.authors = line[10].replace(`"`, ``).split(",");
-        manga.artists = line[11].replace(`"`, ``).split(",");
-        manga.publicationStatus = line[12];
-        manga.followers = Number(line[13]);
-        manga.commentCount = Number(line[14]);
-        manga.demographic = line[15];
-        manga.lastVolume = Number(line[17]);
-        manga.lastChapter = Number(line[18]);
-        manga.allCovers = line[19].replace(`"`, ``).split(",");
-        manga.ratingBayesian = Number(line[20]);
-        mangaList.push(manga)
-    });
+    /**
+     * Get all manga
+     * @returns An array with all mangas in the database
+     */
+    async readMangaList(): Promise<Array<Manga>> {
+        const lines = this.content.split("\n");
+        let mangaList: Array<Manga> = new Array<Manga>;
 
-    return await mangaList;
-  }
+        lines.forEach(e => {
+            const line = e.trim().split(",");
+            const manga = new Manga(line[0],line[1],line[4],line[5],Number(line[8]),line[16]);
+            manga.germanTitle = line[2].replace(`"`, ``).split(",");
+            manga.originalRomanjiTitle = line[3].replace(`"`, ``).split(",");
+            manga.contentRating = line[6];
+            manga.tags = line[7].replace(`"`, ``).split(",");
+            manga.ratingAverage = Number(line[8]);
+            manga.releaseDate = line[9];
+            manga.authors = line[10].replace(`"`, ``).split(",");
+            manga.artists = line[11].replace(`"`, ``).split(",");
+            manga.publicationStatus = line[12];
+            manga.followers = Number(line[13]);
+            manga.commentCount = Number(line[14]);
+            manga.demographic = line[15];
+            manga.lastVolume = Number(line[17]);
+            manga.lastChapter = Number(line[18]);
+            manga.allCovers = line[19].replace(`"`, ``).split(",");
+            manga.ratingBayesian = Number(line[20]);
+            mangaList.push(manga)
+        });
 
-  /**
-   * Get a specified manga
-   * @param id The id of a specific manga you need
-   * @returns Manga
-   * @throws When the manga id you gave doesnt exist
-   */
-  async readMangaId(id:string): Promise<Manga> { 
+        return await mangaList;
+    }
+
+    /**
+     * Get a specified manga
+     * @param id The id of a specific manga you need
+     * @returns Manga
+     * @throws When the manga id you gave doesnt exist
+     */
+    async readMangaId(id:string): Promise<Manga> { 
     const mangaList = await this.readMangaList();
     for (const manga of mangaList) {
         if (manga.id === id) {
@@ -64,58 +69,58 @@ export class MangaService {
         }
     }
     throw new Error("Manga not found!");
-  }
+    }
 
-  /**
-   * Add one manga to the database
-   * @param manga The manga you want to add
-   */
-  async writeManga(manga:Manga) {
+    /**
+     * Add one manga to the database
+     * @param manga The manga you want to add
+     */
+    async writeManga(manga:Manga) {
     this.content
-  }
+    }
 
-  /**
-   * Add mangas to the database
-   * @param manga An arraylist of mangas to add
-   */
-  async writeMangas(manga:Manga[]) {
+    /**
+     * Add mangas to the database
+     * @param manga An arraylist of mangas to add
+     */
+    async writeMangas(manga:Manga[]) {
     //soon™️
-  }
+    }
 
-  /**
-   * Update an existing manga (CANNOT CHANGE ID)
-   * @param manga The updated manga
-   * @throws When manga is not found
-   */
-  async updateManga(manga:Manga) {
+    /**
+     * Update an existing manga (CANNOT CHANGE ID)
+     * @param manga The updated manga
+     * @throws When manga is not found
+     */
+    async updateManga(manga:Manga) {
     //soon™️
-  }
-  /**
-   * Update multiple mangas (CANNOT CHANGE ID)
-   * @param manga The updated mangas
-   * @throws When mangas are not found
-   */
-  async updateMangas(manga:Manga[]) {
+    }
+    /**
+     * Update multiple mangas (CANNOT CHANGE ID)
+     * @param manga The updated mangas
+     * @throws When mangas are not found
+     */
+    async updateMangas(manga:Manga[]) {
     //soon™️
-  }
+    }
 
-  /**
-   * Delete a manga
-   * @param id The id of manga you want to delete
-   * @throws When manga is not found
-   */
-  async deleteManga(id:string) {
+    /**
+     * Delete a manga
+     * @param id The id of manga you want to delete
+     * @throws When manga is not found
+     */
+    async deleteManga(id:string) {
     //soon™️
-  }
+    }
 
-  /**
-   * Delete multiple mangas
-   * @param id Array list of id's you want to delete
-   * @throws When a manga is not found and cancles the entire process
-   */
-  async deleteMangas(id:string[]) {
+    /**
+     * Delete multiple mangas
+     * @param id Array list of id's you want to delete
+     * @throws When a manga is not found and cancles the entire process
+     */
+    async deleteMangas(id:string[]) {
     //soon™️
-  }
+    }
 }
 
 export class Manga {
