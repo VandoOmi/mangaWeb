@@ -9,35 +9,12 @@ export class MangaService {
 
     private mangaCsv = 'public/datenbank/manga.csv';
     private mangaList: Array<Manga> = [];
-
-    constructor() { }
-
-    /**
-     * Initialistion
-     */
-    public async init(): Promise<void> {
-        let csvServ = new CsvService();
-        csvServ.init(this.mangaCsv);
-        this.mangaList = await this.readMangaList(csvServ.getContent());
-        console.log('MangaService wurde initialisiert');
-    }
-
     
-    public get mangalist() : Array<Manga> {
-        return this.mangaList;
-    }
-    
-    /**
-     * Get all manga
-     * @returns An array with all mangas in the database
-     */
-    private async readMangaList(content: string): Promise<Array<Manga>> {
-        const lines = content.split("\n");
-        let mangaList: Array<Manga> = new Array<Manga>;
-
-        lines.filter(e => e!=undefined)
+    private async readMangaList(content: string) {
+        content.split("\n")
+            .filter(e => e!=undefined)
             .forEach(e  => {
-                const line = e.trim().split(",");
+                const line = e.trim().split(";");
                 const manga = new Manga(line[0],line[1],line[4],line[5],Number(line[8]),line[16]);
                 manga.germanTitle = line[2].replace(`"`, ``).split(",");
                 manga.originalRomanjiTitle = line[3].replace(`"`, ``).split(",");
@@ -55,10 +32,28 @@ export class MangaService {
                 manga.lastChapter = Number(line[18]);
                 manga.allCovers = line[19].replace(`"`, ``).split(",");
                 manga.ratingBayesian = Number(line[20]);
-                mangaList.push(manga)
+                this.mangaList.push(manga)
             });
+    }
 
-        return await mangaList;
+    constructor() { }
+
+    /**
+     * Initialistion
+     */
+    public async init(): Promise<void> {
+        let csvServ = new CsvService();
+        csvServ.init(this.mangaCsv);
+        await this.readMangaList(csvServ.getContent());
+        console.log('MangaService wurde initialisiert');
+    }
+
+    /**
+     * Get the mangalist
+     * @returns An array with all mangas
+     */
+    public get mangalist() : Array<Manga> {
+        return this.mangaList;
     }
 
     /**

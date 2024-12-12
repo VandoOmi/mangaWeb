@@ -20,6 +20,9 @@ export class UserService {
 
   constructor() { }
 
+  /**
+   * Initialisation
+   */
   public async init(): Promise<void>
   {
     let csvServ = new CsvService();
@@ -28,6 +31,11 @@ export class UserService {
     console.log('UserService wurde initialisiert')
   }
 
+  /**
+   * 
+   * @param id as a String
+   * @returns a User
+   */
   public async getUserById(id:string): Promise<User> {
     let idInt = parseInt(id);
     return this.userList[idInt];
