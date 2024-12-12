@@ -17,7 +17,7 @@ export class CsvService
     return this.content;
   }
 
-  async init(path: string) 
+  public async init(path: string) 
   {
     this.csvPath = new URL(path);
     this.content =  await this.load();
@@ -40,4 +40,26 @@ export class CsvService
       return '';
     }
   } 
+
+  public async update(content: string): Promise<void> {
+    try {
+      const response = await fetch(this.csvPath.toString(), {
+        method: 'PUT', // oder 'POST', je nach API-Anforderung
+        headers: {
+          'Content-Type': 'text/csv', // oder 'application/json', je nach Format
+        },
+        body: content,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Fehler beim Aktualisieren der Datei: ${response.statusText}`);
+      }
+
+      // Erfolgreiches Update
+      this.content = content; // Aktualisiere den Inhalt im Service
+      console.log('Datei erfolgreich aktualisiert.');
+    } catch (error) {
+      console.error('Fehler beim Aktualisieren der CSV-Datei:', error);
+    }
+  }
 }
