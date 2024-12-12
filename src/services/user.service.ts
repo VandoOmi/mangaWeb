@@ -6,44 +6,31 @@ import { CsvService } from './csv.service';
 })
 export class UserService {
 
-  static userCsv = '../public/datenbank/user.csv';
-  content: string;
+  private userCsv = '../public/datenbank/user.csv';
+  private userList: Array<User> = new Array<User>;
 
-  constructor(csvServ: CsvService)
-  { 
-    csvServ.init(UserService.userCsv);
-    this.content = csvServ.getContent();
-  }
-
-  async readUserList(): Promise<Array<User>> {
-    const lines = this.content.split("\n");
-    let userList: Array<User> = new Array<User>;
-
-    lines.forEach(e => {
+  private async readUserList(content: string) {
+    content.split("\n").forEach(e => {
       const line = e.trim().split(";");
       if(line.length === 3) {
-      userList.push(new User(line[0],line[1],line[2]))
+      this.userList.push(new User(line[0],line[1],line[2]))
       }
     });
-
-    return userList;
   }
 
-  async getUserById(id:string): Promise<User> {
+  constructor() { }
+
+  public async init(): Promise<void>
+  {
+    let csvServ = new CsvService();
+    csvServ.init(this.userCsv);
+    await this.readUserList(csvServ.getContent());
+    console.log('UserService wurde initialisiert')
+  }
+
+  public async getUserById(id:string): Promise<User> {
     let idInt = parseInt(id);
-    const lines = this.content.split("\n");
-    let userLine = lines[idInt];
-    /*let name:number; 
-    userLine.split(';')[1].split('').forEach(e => {
-      name += e.charCodeAt(0)
-    });
-    let role: number
-    userLine.split(';')[2].split('').forEach(e => {
-      role += e.charCodeAt(0)
-    });*/
-    return new User(userLine[0],userLine[1],userLine[2]);
-
-
+    return this.userList[idInt];
   }
 }
 
