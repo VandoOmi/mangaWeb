@@ -10,10 +10,7 @@ export class MangaService {
     private mangaCsv = 'public/datenbank/manga.csv';
     private mangaList: Array<Manga> = [];
 
-    constructor()
-    { 
-        this.init()
-    }
+    constructor() { }
 
     /**
      * Initialistion
@@ -38,27 +35,28 @@ export class MangaService {
         const lines = content.split("\n");
         let mangaList: Array<Manga> = new Array<Manga>;
 
-        lines.forEach(e => {
-            const line = e.trim().split(",");
-            const manga = new Manga(line[0],line[1],line[4],line[5],Number(line[8]),line[16]);
-            manga.germanTitle = line[2].replace(`"`, ``).split(",");
-            manga.originalRomanjiTitle = line[3].replace(`"`, ``).split(",");
-            manga.contentRating = line[6];
-            manga.tags = line[7].replace(`"`, ``).split(",");
-            manga.ratingAverage = Number(line[8]);
-            manga.releaseDate = line[9];
-            manga.authors = line[10].replace(`"`, ``).split(",");
-            manga.artists = line[11].replace(`"`, ``).split(",");
-            manga.publicationStatus = line[12];
-            manga.followers = Number(line[13]);
-            manga.commentCount = Number(line[14]);
-            manga.demographic = line[15];
-            manga.lastVolume = Number(line[17]);
-            manga.lastChapter = Number(line[18]);
-            manga.allCovers = line[19].replace(`"`, ``).split(",");
-            manga.ratingBayesian = Number(line[20]);
-            mangaList.push(manga)
-        });
+        lines.filter(e => e!=undefined)
+            .forEach(e  => {
+                const line = e.trim().split(",");
+                const manga = new Manga(line[0],line[1],line[4],line[5],Number(line[8]),line[16]);
+                manga.germanTitle = line[2].replace(`"`, ``).split(",");
+                manga.originalRomanjiTitle = line[3].replace(`"`, ``).split(",");
+                manga.contentRating = line[6];
+                manga.tags = line[7].replace(`"`, ``).split(",");
+                manga.ratingAverage = Number(line[8]);
+                manga.releaseDate = line[9];
+                manga.authors = line[10].replace(`"`, ``).split(",");
+                manga.artists = line[11].replace(`"`, ``).split(",");
+                manga.publicationStatus = line[12];
+                manga.followers = Number(line[13]);
+                manga.commentCount = Number(line[14]);
+                manga.demographic = line[15];
+                manga.lastVolume = Number(line[17]);
+                manga.lastChapter = Number(line[18]);
+                manga.allCovers = line[19].replace(`"`, ``).split(",");
+                manga.ratingBayesian = Number(line[20]);
+                mangaList.push(manga)
+            });
 
         return await mangaList;
     }
