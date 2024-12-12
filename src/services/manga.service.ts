@@ -8,7 +8,7 @@ import { CsvService } from './csv.service';
 export class MangaService {
 
     private mangaCsv = 'public/datenbank/manga.csv';
-    mangaList: Array<Manga> = [];
+    private mangaList: Array<Manga> = [];
 
     constructor()
     { 
@@ -18,18 +18,23 @@ export class MangaService {
     /**
      * Initialistion
      */
-    async init() 
-    {
+    public async init(): Promise<void> {
         let csvServ = new CsvService();
         csvServ.init(this.mangaCsv);
         this.mangaList = await this.readMangaList(csvServ.getContent());
+        console.log('MangaService wurde initialisiert');
     }
 
+    
+    public get mangalist() : Array<Manga> {
+        return this.mangaList;
+    }
+    
     /**
      * Get all manga
      * @returns An array with all mangas in the database
      */
-    async readMangaList(content: string): Promise<Array<Manga>> {
+    private async readMangaList(content: string): Promise<Array<Manga>> {
         const lines = content.split("\n");
         let mangaList: Array<Manga> = new Array<Manga>;
 
@@ -64,7 +69,7 @@ export class MangaService {
      * @returns Manga
      * @throws When the manga id you gave doesnt exist
      */
-    async readMangaId(id:string): Promise<Manga> { 
+    public async readMangaId(id:string): Promise<Manga> { 
     for (const manga of this.mangaList) {
         if (manga.id === id) {
             return manga;
