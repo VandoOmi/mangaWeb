@@ -10,10 +10,11 @@ import { DeleteItemsComponent } from './routed/administration/delete-items/delet
 import { EditItemsComponent } from './routed/administration/edit-items/edit-items.component';
 import { EditUserComponent } from './routed/administration/edit-user/edit-user.component';
 import { roleGuard } from '../services/guards/role.guard';
+import { AuthComponent } from './routed/auth/auth.component';
 
 export const routes: Routes = [
   {
-    path: 'home',
+    path: '',
     component: HomeComponent
   },
   {
@@ -53,6 +54,12 @@ export const routes: Routes = [
   {
     path: 'edit-user',
     component: EditUserComponent
+  },
+  {
+    path: 'auth',
+    component: AuthComponent,
+    canActivate: [roleGuard],
+    data: { role: 'admin' },
   },
   {
     path: '**',

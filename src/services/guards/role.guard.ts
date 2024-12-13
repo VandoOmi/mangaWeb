@@ -18,13 +18,13 @@ export const roleGuard: CanActivateFn = (route, state) => {
   return afAuth.authState.pipe(
     switchMap((user) => {
       if (!user) {
-        router.navigate(['/home']);
+        router.navigate(['']);
         return of(false);
       }
       return firestore.collection('users').doc(user.uid).valueChanges().pipe(
         map((userData: any) => {
           if (!userData || !userData.role || userData.role !== requiredRole) {
-            router.navigate(['/home']);
+            router.navigate(['']);
             return false;
           }
           return true;
