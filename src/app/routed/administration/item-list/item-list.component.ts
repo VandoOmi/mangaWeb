@@ -15,6 +15,6 @@ export class ItemListComponent {
   mangaList: Array<Manga>;
 
   constructor(mangaServ: MangaService) {
-    this.mangaList = mangaServ.mangaList || [];
+    this.mangaList = mangaServ.mangalist || [];
   }
 }
