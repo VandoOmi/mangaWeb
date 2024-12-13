@@ -9,6 +9,7 @@ import { AddItemsComponent } from './routed/administration/add-items/add-items.c
 import { DeleteItemsComponent } from './routed/administration/delete-items/delete-items.component';
 import { EditItemsComponent } from './routed/administration/edit-items/edit-items.component';
 import { EditUserComponent } from './routed/administration/edit-user/edit-user.component';
+import { roleGuard } from '../services/guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -17,7 +18,9 @@ export const routes: Routes = [
   },
   {
     path: 'administration',
-    component: AdministraionComponent
+    component: AdministraionComponent,
+    canActivate: [roleGuard],
+    data: { role: 'admin' },
   },
   {
     path: 'datenschutz',

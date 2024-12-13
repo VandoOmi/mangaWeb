@@ -1,0 +1,30 @@
+<div class="profil">
+    <div class="container flex-down">
+      <h2 *ngIf="!login">Sign In</h2>
+      <h2 *ngIf="login">Login</h2>
+      <div class="login-box flex-down">
+        <form (ngSubmit)="onSubmit()">
+          <div *ngIf="!login">
+            <p>Email</p>
+            <input type="email" [(ngModel)]="email" name="email" required>
+          </div>
+          <div>
+            <p>Passwort</p>
+            <input type="password" [(ngModel)]="password" name="password" required>
+          </div>
+          <div *ngIf="!login">
+            <p>Passwort wiederholen</p>
+            <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+          </div>
+          <div>
+            <button class="continue-button" type="submit">Weiter</button>
+          </div>
+        </form>
+      </div>
+      <div>
+        <button *ngIf="!login" class="switch-button" (click)="toggleLogin()">Login</button>
+        <button *ngIf="login" class="switch-button" (click)="toggleLogin()">Sign In</button>
+      </div>
+    </div>
+  </div>
+  

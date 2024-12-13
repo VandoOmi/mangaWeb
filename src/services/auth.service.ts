@@ -2,41 +2,79 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private afAuth: AngularFireAuth, private firestore: AngularFirestore) {}
+  constructor(
+    private afAuth: AngularFireAuth,
+    private firestore: AngularFirestore
+  ) {}
 
-  public async register(email: string, password: string, role: string): Promise<void> {
+  // Registrierung für normale Benutzer
+  async registerUser(email: string, password: string): Promise<void> {
     const userCredential = await this.afAuth.createUserWithEmailAndPassword(email, password);
     const user = userCredential.user;
 
     if (user) {
+      // Benutzerrolle als 'user' speichern
       await this.firestore.collection('users').doc(user.uid).set({
         email,
-        role,
+        role: 'user'
       });
     }
   }
 
-  public login(email: string, password: string): Promise<any> {
+  // Registrierung für Admins (nur für bestehende Admins erlaubt)
+  async registerAdmin(email: string, password: string): Promise<void> {
+    const currentUser = await this.afAuth.currentUser;
+
+    if (!currentUser) {
+      throw new Error('Nicht autorisiert');
+    }
+
+    // Überprüfen, ob der aktuelle Benutzer ein Admin ist
+    const userDoc = await this.firestore.collection('users').doc(currentUser.uid).get().pipe(take(1)).toPromise();
+    const userData: any = userDoc?.data();
+
+    if (!userData || userData.role !== 'admin') {
+      throw new Error('Nur Admins dürfen neue Admins registrieren');
+    }
+
+    // Admin-Benutzer erstellen
+    const userCredential = await this.afAuth.createUserWithEmailAndPassword(email, password);
+    const user = userCredential.user;
+
+    if (user) {
+      // Benutzerrolle als 'admin' speichern
+      await this.firestore.collection('users').doc(user.uid).set({
+        email,
+        role: 'admin'
+      });
+    }
+  }
+
+  // Benutzer anmelden
+  login(email: string, password: string): Promise<any> {
     return this.afAuth.signInWithEmailAndPassword(email, password);
   }
 
-  public logout(): Promise<void> {
+  // Benutzer abmelden
+  logout(): Promise<void> {
     return this.afAuth.signOut();
   }
 
-  public getCurrentUser(): Observable<any> {
+  // Aktuellen Benutzer abrufen
+  getCurrentUser(): Observable<any> {
     return this.afAuth.authState.pipe(
       map(user => user ? { uid: user.uid, email: user.email } : null)
     );
   }
 
-  public getUserRole(uid: string): Observable<string | null> {
+  // Benutzerrolle abrufen
+  getUserRole(uid: string): Observable<string | null> {
     return this.firestore
       .collection('users')
       .doc(uid)
