@@ -13,8 +13,8 @@ export class HeaderComponent {
   constructor(private router: Router) {}
 
   navigateTo(e: Event) {
-    const selectValue = e.target as HTMLSelectElement;
-    const route = selectValue.value;
+    var selectValue = e.target as HTMLSelectElement;
+    var route = selectValue.value;
     if (route) this.router.navigate([route]); 
   }
 }
