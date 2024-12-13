@@ -1,19 +1,14 @@
 <div class="header">
     <div class="left">
-        <a [routerLink]="['/home']">
+        <a [routerLink]="'/home'">
             <img class="logo" src="">
         </a>
         <a [routerLink]="['/datenschutz']">Produkte</a>
-        <select name="Über Uns" id="aboutUsDropdown">
-            <option value="Impressum">
-                <a [routerLink]="['/impressum']">Impressum</a>
-            </option>
-            <option value="Datenschutz">
-                <a [routerLink]="['/datenschutz']">Datenschutz</a>
-            </option>
-            <option value="Team">
-                <a [routerLink]="['/team']">Team</a>
-            </option>
+        <select name="Über Uns" id="aboutUsDropdown" (change)="navigateTo($event)">
+            <option value="">Über Uns</option>
+            <option value="/impressum">Impressum</option>
+            <option value="/datenschutz">Datenschutz</option>
+            <option value="/team">Team</option>
         </select>
         <a [routerLink]="['/administration']">Administration</a>
     </div>
