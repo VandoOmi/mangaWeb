@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "mangaWeb": {
+    "manga-web": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "mangaWeb:build:production"
+              "buildTarget": "manga-web:build:production"
             },
             "development": {
-              "buildTarget": "mangaWeb:build:development"
+              "buildTarget": "manga-web:build:development"
             }
           },
           "defaultConfiguration": "development"
