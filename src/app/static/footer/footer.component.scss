@@ -1,0 +1,15 @@
+.container{
+    display: flex;
+    justify-content: space-around;
+    align-items: baseline;
+}
+a{
+    color: black;
+}
+a:active{
+    color: black;
+}
+a:hover{
+    font-style: italic;
+    font-weight: 10%;
+}
