@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 
 @Injectable
 ({
@@ -34,10 +35,14 @@ export class CsvService
    * 
    * @param path 
    */
-  public async init(path: string) 
-  {
-    this.csvPath = path
-    this.content =  await this.load();
+  public async init(path: string): Promise<void> {
+    if (isPlatformBrowser(PLATFORM_ID)) {
+      const baseUrl = window.location.origin; // Funktioniert nur im Browser
+      this.csvPath = baseUrl+path;
+      this.content = await this.load();
+    } else {
+      console.warn('Init wird auf dem Server nicht ausgeführt.');
+    }
   }
 
   /**
