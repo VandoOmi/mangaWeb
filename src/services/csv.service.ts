@@ -4,24 +4,11 @@ import { Injectable } from '@angular/core';
 ({
   providedIn: 'root'
 })
+
 export class CsvService
 {
-
-  private csvPath!: URL;
+  private csvPath: string = '';
   private content: string = '';
-
-  constructor() { }
-
-  getContent(): string 
-  {
-    return this.content;
-  }
-
-  public async init(path: string) 
-  {
-    this.csvPath = new URL(path);
-    this.content =  await this.load();
-  }
 
   private async load(): Promise<string>
   {
@@ -41,13 +28,25 @@ export class CsvService
     }
   } 
 
+  constructor() { }
+
   /**
    * 
-   * @param content as a string
+   * @param path 
+   */
+  public async init(path: string) 
+  {
+    this.csvPath = path
+    this.content =  await this.load();
+  }
+
+  /**
+   * updates the content in the csv-file
+   * @param content
    */
   public async update(content: string): Promise<void> {
     try {
-      const response = await fetch(this.csvPath.toString(), {
+      const response = await fetch(this.csvPath, {
         method: 'PUT',
         headers: {
           'Content-Type': 'text/csv',
@@ -64,5 +63,10 @@ export class CsvService
     } catch (error) {
       console.error('Fehler beim Aktualisieren der CSV-Datei:', error);
     }
+  }
+
+  public getContent(): string 
+  {
+    return this.content;
   }
 }
