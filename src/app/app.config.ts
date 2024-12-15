@@ -19,6 +19,7 @@ export const appConfig: ApplicationConfig = {
       useFactory: (mangaService: MangaService) => () => mangaService.init(),
       deps: [MangaService],
       multi: true
-    }, provideFirebaseApp(() => initializeApp({"projectId":"manga-idk","appId":"1:262611467870:web:3a84284916cfd841297ecf","storageBucket":"manga-idk.firebasestorage.app","apiKey":"AIzaSyAyXXxdr_vJUqK9vugv0jSMXXPeJy2_izk","authDomain":"manga-idk.firebaseapp.com","messagingSenderId":"262611467870"})), provideAuth(() => getAuth()), provideFirestore(() => getFirestore())]
+    }, 
+    provideFirebaseApp(() => initializeApp({"projectId":"manga-idk","appId":"1:262611467870:web:3a84284916cfd841297ecf","storageBucket":"manga-idk.firebasestorage.app","apiKey":"AIzaSyAyXXxdr_vJUqK9vugv0jSMXXPeJy2_izk","authDomain":"manga-idk.firebaseapp.com","messagingSenderId":"262611467870"})), provideAuth(() => getAuth()), provideFirestore(() => getFirestore())]
   
 };
