@@ -1,18 +1,21 @@
 <div class="header">
     <div class="left">
         <a [routerLink]="'/home'">
-            <img class="logo" src="">
+            <img class="logo" src="favicon.ico" alt="Logo">
         </a>
-        <a [routerLink]="['/datenschutz']">Produkte</a>
         <select name="Über Uns" id="aboutUsDropdown" (change)="navigateTo($event)">
             <option value="">Über Uns</option>
-            <option value="/impressum">Impressum</option>
-            <option value="/datenschutz">Datenschutz</option>
             <option value="/team">Team</option>
         </select>
-        <a [routerLink]="['/administration']">Administration</a>
+        <button 
+            class="admin-button" 
+            *ngIf="this.authServ.getCurrentUserRole() === 'admin'" 
+            routerLink="/administation"
+        >
+            Administation
+        </button>
     </div>
     <div class="right">
-        <a [routerLink]="['/auth']">Login</a>
+        <button class="login-button" routerLink="/auth">Login</button>
     </div>
 </div>

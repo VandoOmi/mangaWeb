@@ -73,6 +73,20 @@ export class AuthService {
     );
   }
 
+  async getCurrentUserRole(): Promise<string | null> {
+    const currentUser = await this.afAuth.currentUser;
+
+    if (!currentUser) {
+      return null;
+    }
+
+    const userDoc = await this.firestore.collection('users').doc(currentUser.uid).get().pipe(take(1)).toPromise();
+    const userData: any = userDoc?.data();
+
+    return userData?.role || null;
+  }
+
+
   // Benutzerrolle abrufen
   getUserRole(uid: string): Observable<string | null> {
     return this.firestore
