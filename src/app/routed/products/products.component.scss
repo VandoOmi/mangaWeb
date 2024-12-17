@@ -1,21 +1,19 @@
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 .manga {
     border-radius: 15px;
     background-color: rgba(128, 128, 128, 0.5);
     /*width: 50%;*/
     padding: 10px;
-}
-.manga .table {
-    display: table;
-    border-collapse: collapse;
-}
-.manga .row {
-    display: table-row;
-}
-.manga .cell {
-    display: table-cell;
-}
-.manga .header {
-    display: table-header-group;
+    border-bottom: 5px;
+    border-right: 5px;
 }
 .manga .name {
     display: flex;
