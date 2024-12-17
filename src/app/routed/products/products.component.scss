@@ -4,8 +4,18 @@
     /*width: 50%;*/
     padding: 10px;
 }
-.manga #table {
-    display: flex;
+.manga .table {
+    display: table;
+    border-collapse: collapse;
+}
+.manga .row {
+    display: table-row;
+}
+.manga .cell {
+    display: table-cell;
+}
+.manga .header {
+    display: table-header-group;
 }
 .manga .name {
     display: flex;
@@ -33,12 +43,12 @@
     flex-direction: row;
     gap: 3px;
 }
-.manga .tags {
+.manga #tags {
     display: flex;
     flex-direction: row;
     gap: 3px;
 }
-.manga #tags {
+.manga .tags {
     color: rgb(250, 250, 250);
     border-radius: 5px;
     padding-top: 2px;
