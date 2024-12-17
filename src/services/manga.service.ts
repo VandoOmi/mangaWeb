@@ -15,23 +15,28 @@ export class MangaService {
             .filter(e => e!=undefined)
             .forEach(e  => {
                 const line = e.trim().split(";");
-                const manga = new Manga(line[0],line[1],line[4],line[5],Number(line[8]),line[16]);
-                manga.germanTitle = line[2]?.replace(`"`, ``).split(",");
-                manga.originalRomanjiTitle = line[3]?.replace(`"`, ``).split(",");
-                manga.contentRating = line[6];
-                manga.tags = line[7]?.replace(`"`, ``).split(",");
-                manga.ratingAverage = Number(line[8]);
-                manga.releaseDate = line[9];
-                manga.authors = line[10]?.replace(`"`, ``).split(",");
-                manga.artists = line[11]?.replace(`"`, ``).split(",");
-                manga.publicationStatus = line[12];
-                manga.followers = Number(line[13]);
-                manga.commentCount = Number(line[14]);
-                manga.demographic = line[15];
-                manga.lastVolume = Number(line[17]);
-                manga.lastChapter = Number(line[18]);
-                manga.allCovers = line[19]?.replace(`"`, ``).split(",");
-                manga.ratingBayesian = Number(line[20]);
+                const manga = new Manga(
+                    line[0],
+                    line[1],
+                    line[2].split(","),
+                    line[3].split(","),
+                    line[4],
+                    line[5],
+                    line[6],
+                    line[7].split(","),
+                    Number(line[8]),
+                    line[9],
+                    line[10].split(","),
+                    line[11].split(","),
+                    line[12],
+                    Number(line[13]),
+                    Number(line[14]),
+                    line[15],
+                    line[16],
+                    Number(line[17]),
+                    Number(line[18]),
+                    Number(line[20])
+                );
                 this.mangaList.push(manga)
             });
     }
@@ -144,31 +149,29 @@ export class Manga {
   private _originalLanguage: string; //16 .
   private _lastVolume: number; //17
   private _lastChapter: number; //18
-  private _allCovers: string[]; //19
   private _ratingBayesian: number; //20
 
   constructor(
     id: string, //0 .
     defaultTitle: string, //1 .
+    germanTitle: string[], //2
+    originalRomanjiTitle: string[], //3
     currentCover: string, //4 .
     description: string, //5 .
+    contentRating: string, //6
+    tags: string[], //7
     ratingAverage: number, //8 .
+    releaseDate: string, //9
+    authors: string[], //10
+    artists: string[], //11
+    publicationStatus: string, //12
+    followers: number, //13
+    commentCount: number, //14
+    demographic: string, //15
     originalLanguage: string, //16 .
-    germanTitle?: string[], //2
-    originalRomanjiTitle?: string[], //3
-    contentRating?: string, //6
-    tags?: string[], //7
-    releaseDate?: string, //9
-    authors?: string[], //10
-    artists?: string[], //11
-    publicationStatus?: string, //12
-    followers?: number, //13
-    commentCount?: number, //14
-    demographic?: string, //15
-    lastVolume?: number, //17
-    lastChapter?: number, //18
-    allCovers?: string[], //19
-    ratingBayesian?: number //20
+    lastVolume: number, //17
+    lastChapter: number, //18
+    ratingBayesian: number //20
   ) {
     this._id = id;
     this._defaultTitle = defaultTitle;
@@ -189,7 +192,6 @@ export class Manga {
     this._originalLanguage = originalLanguage;
     this._lastVolume = lastVolume || 0;
     this._lastChapter = lastChapter || 0;
-    this._allCovers = allCovers || [];
     this._ratingBayesian = ratingBayesian || 0;
   }
 
@@ -343,14 +345,6 @@ export class Manga {
 
   set lastChapter(value: number) {
       this._lastChapter = value;
-  }
-
-  get allCovers(): string[] {
-      return this._allCovers;
-  }
-
-  set allCovers(value: string[]) {
-      this._allCovers = value;
   }
 
   get ratingBayesian(): number {
