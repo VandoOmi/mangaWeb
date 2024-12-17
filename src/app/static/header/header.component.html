@@ -7,11 +7,9 @@
             <option value="">Über Uns</option>
             <option value="/team">Team</option>
         </select>
-        <div *ngIf="this.authServ.getCurrentUserRole() === 'admin'">
-            <button class="admin-button" routerLink="/administation">
-                Administation
-            </button>
-        </div>
+        <button class="admin-button" routerLink="/administation">
+            Administation
+        </button>
     </div>
     <div class="right">
         <button class="login-button" routerLink="/auth">Login</button>
