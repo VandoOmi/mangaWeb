@@ -7,7 +7,7 @@ import { CsvService } from './csv.service';
 })
 export class MangaService {
 
-    private mangaCsv = '/home/vando/Dokumente/manga-web/public/datenbank/manga.csv';
+    private mangaCsv = '/public/datenbank/manga.csv';
     private mangaList: Array<Manga> = [];
     
     private async readMangaList(content: string) {
@@ -47,8 +47,9 @@ export class MangaService {
      * Initialistion
      */
     public async init(): Promise<void> {
+        console.log('Starte MangaService initialisierung');
         let csvServ = new CsvService();
-        csvServ.init(this.mangaCsv);
+        await csvServ.init(this.mangaCsv);
         await this.readMangaList(csvServ.getContent());
         console.log('MangaService wurde initialisiert');
     }

@@ -2,23 +2,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 4rem;
-    border-bottom-color: rgba($color: #000000, $alpha: 0.7);
-    border-bottom: 1px;
 
-    &>* {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-    }
-
-    .left {
-        &>* {
-            margin-left: 1rem;
-        }
-        .logo {
-            height: 3rem;
-        }
+    .left>* {
+        margin-left: 1rem;
     }
 
     .right>* {
@@ -26,9 +12,7 @@
     }
 
     .child {
-        font-family: 'tan-nimbus';
-        font-size: large;   
-        text-decoration: none;
-        color: black;
+        font-size: large;
+        
     }
 }

@@ -1,5 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 @Injectable
 ({
@@ -20,6 +19,7 @@ export class CsvService
       {
         throw new Error(`Fehler beim Laden der Datei: ${response.statusText}`)
       }
+      console.log('Die CSV-Datei wurde erfolgreich geladen.')
       return await response.text();
     }
     catch(error) 
@@ -36,13 +36,10 @@ export class CsvService
    * @param path 
    */
   public async init(path: string): Promise<void> {
-    if (isPlatformBrowser(PLATFORM_ID)) {
-      const baseUrl = window.location.origin; // Funktioniert nur im Browser
-      this.csvPath = baseUrl+path;
-      this.content = await this.load();
-    } else {
-      console.warn('Init wird auf dem Server nicht ausgeführt.');
-    }
+    const baseUrl = window.location.origin;
+    this.csvPath = baseUrl+path;
+    this.content = await this.load();
+    console.log('CSV-Service wurde initialisiert.')
   }
 
   /**
