@@ -1,1 +1,21 @@
-<p>products works!</p>
+<app-header></app-header>
+<div>
+    <h1>Our mangas:</h1>
+    <select name="Sort by" id="sortMangas">
+        <option value="ascTitle">Title Ascending</option>
+        <option value="descTitle">Title Descending</option>
+        <option value="highRating">Highest Rating</option>
+        <option value="lowRating">Lowest Rating</option>
+        <option value="mostFollows">Most Follows</option>
+        <option value="fewFollow">Fewest Follows</option>
+        <option value="ascYear">Year Ascending</option>
+        <option value="descYear">Year Descending</option>
+    </select>
+    <select name="View mode" id="viewMangas">
+        <option value="list">List</option>
+        <option value="table">Table</option>
+        <option value="image">Cover with title</option>
+    </select>
+    <div class="mangaOutput"></div>
+</div>
+<app-footer></app-footer>
