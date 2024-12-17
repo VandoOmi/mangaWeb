@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
+import { Observable, lastValueFrom } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 @Injectable({
@@ -75,14 +75,15 @@ export class AuthService {
 
   async getCurrentUserRole(): Promise<string | null> {
     const currentUser = await this.afAuth.currentUser;
-
+  
     if (!currentUser) {
       return null;
     }
-
-    const userDoc = await this.firestore.collection('users').doc(currentUser.uid).get().pipe(take(1)).toPromise();
+  
+    const userDoc$ = this.firestore.collection('users').doc(currentUser.uid).get();
+    const userDoc = await lastValueFrom(userDoc$);
     const userData: any = userDoc?.data();
-
+  
     return userData?.role || null;
   }
 
