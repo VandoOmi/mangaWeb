@@ -1,0 +1,63 @@
+.manga {
+    border-radius: 15px;
+    background-color: rgba(128, 128, 128, 0.5);
+    /*width: 50%;*/
+    padding: 10px;
+}
+.manga #table {
+    display: flex;
+}
+.manga .name {
+    display: flex;
+    flex-wrap: wrap;
+}
+.manga .lang {
+    height: 20px;
+    width: 10px;
+    border-radius: 10px;
+}
+.manga .description {
+    display: -webkit-box; 
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.manga .cover {
+    height: 250px;
+    width: 175px;
+    border-radius: 10px;
+}
+.manga .stats {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+}
+.manga .tags {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+}
+.manga #tags {
+    color: rgb(250, 250, 250);
+    border-radius: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 3px;
+    padding-right: 5px;
+    width: fit-content;
+}
+.manga .safe {
+    background-color: rgb(30, 170, 10);
+    
+}
+.manga .suggestive {
+    background-color: rgb(170, 170, 10);
+}
+.manga .erotica {
+    background-color: rgb(170, 10, 10);
+}
+.manga .tag {
+    background-color: rgb(100, 100, 100);
+    color: rgb(210, 210, 210);
+}

@@ -7,10 +7,11 @@ import { CsvService } from './csv.service';
 })
 export class MangaService {
 
-    private mangaCsv = '/public/datenbank/manga.csv';
+    private mangaCsv = '/public/datenbank/mangas.json';
     private mangaList: Array<Manga> = [];
     
-    private async readMangaList(content: string) {
+    private async readMangaList(contents?: string) {
+        let content = contents || "";
         content.split("\n")
             .filter(e => e!=undefined)
             .forEach(e  => {
@@ -41,7 +42,11 @@ export class MangaService {
             });
     }
 
-    constructor() { }
+    private async writeFile() {
+        //soon™️
+    }
+
+    constructor() {}
 
     /**
      * Initialistion
@@ -81,16 +86,22 @@ export class MangaService {
      * Add one manga to the database
      * @param manga The manga you want to add
      */
-    async writeManga(manga:Manga) {
-        // idk irgendwas halt
+    public async writeManga(manga:Manga) {
+        this.mangaList.push(manga);
+        this.writeFile();
+        this.readMangaList();
     }
 
     /**
      * Add mangas to the database
-     * @param manga An arraylist of mangas to add
+     * @param mangas An arraylist of mangas to add
      */
-    async writeMangas(manga:Manga[]) {
-    //soon™️
+    public async writeMangas(mangas:Manga[]) {
+        for (const manga of mangas) {
+            this.mangalist.push(manga);
+        }
+        this.writeFile();
+        this.readMangaList();
     }
 
     /**
@@ -98,16 +109,24 @@ export class MangaService {
      * @param manga The updated manga
      * @throws When manga is not found
      */
-    async updateManga(manga:Manga) {
-    //soon™️
+    public async updateManga(manga:Manga) {
+        this.mangaList = this.mangaList.filter(mangaI => mangaI.id === manga.id);
+        this.mangaList.push(manga);
+        this.writeFile();
+        this.readMangaList();
     }
     /**
      * Update multiple mangas (CANNOT CHANGE ID)
-     * @param manga The updated mangas
+     * @param mangas The updated mangas
      * @throws When mangas are not found
      */
-    async updateMangas(manga:Manga[]) {
-    //soon™️
+    public async updateMangas(mangas:Manga[]) {
+        for (const manga of mangas) {
+            this.mangaList = this.mangaList.filter(mangaI => mangaI.id === manga.id);
+            this.mangaList.push(manga);
+        }
+        this.writeFile();
+        this.readMangaList();
     }
 
     /**
@@ -115,17 +134,23 @@ export class MangaService {
      * @param id The id of manga you want to delete
      * @throws When manga is not found
      */
-    async deleteManga(id:string) {
-    //soon™️
+    public async deleteManga(id:string) {
+        this.mangaList = this.mangaList.filter(mangaI => mangaI.id === id)
+        this.writeFile();
+        this.readMangaList();
     }
 
     /**
      * Delete multiple mangas
-     * @param id Array list of id's you want to delete
+     * @param ids Array list of id's you want to delete
      * @throws When a manga is not found and cancles the entire process
      */
-    async deleteMangas(id:string[]) {
-    //soon™️
+    public async deleteMangas(ids:string[]) {
+        for (const id of ids) {
+            this.mangaList = this.mangaList.filter(mangaI => mangaI.id === id);
+        }
+        this.writeFile();
+        this.readMangaList();
     }
 }
 
@@ -133,7 +158,7 @@ export class Manga {
   private _id: string; //0 .
   private _defaultTitle: string; //1 .
   private _germanTitle: string[]; //2
-  private _originalRomanjiTitle: string[]; //3
+  private _originalTitle: string[]; //3
   private _currentCover: string; //4 .
   private _description: string; //5 .
   private _contentRating: string; //6
@@ -155,7 +180,7 @@ export class Manga {
     id: string, //0 .
     defaultTitle: string, //1 .
     germanTitle: string[], //2
-    originalRomanjiTitle: string[], //3
+    originalTitle: string[], //3
     currentCover: string, //4 .
     description: string, //5 .
     contentRating: string, //6
@@ -176,7 +201,7 @@ export class Manga {
     this._id = id;
     this._defaultTitle = defaultTitle;
     this._germanTitle = germanTitle || [];
-    this._originalRomanjiTitle = originalRomanjiTitle || [];
+    this._originalTitle = originalTitle || [];
     this._currentCover = currentCover;
     this._description = description;
     this._contentRating = contentRating || "";
@@ -219,12 +244,12 @@ export class Manga {
       this._germanTitle = value;
   }
 
-  get originalRomanjiTitle(): string[] {
-      return this._originalRomanjiTitle;
+  get originalTitle(): string[] {
+      return this._originalTitle;
   }
 
-  set originalRomanjiTitle(value: string[]) {
-      this._originalRomanjiTitle = value;
+  set originalTitle(value: string[]) {
+      this._originalTitle = value;
   }
 
   get currentCover(): string {
@@ -353,5 +378,39 @@ export class Manga {
 
   set ratingBayesian(value: number) {
       this._ratingBayesian = value;
+  }
+
+  /**
+   * This class to json
+   * @returns The class in a json object
+   */
+  public toJson(): object {
+    let content = {
+        "defaultTitle": this._id,
+        "germanTitle": this._germanTitle,
+        "originalTitle": this._originalTitle,
+        "cover": this._currentCover,
+        "description": this._description,
+        "contentRating": this._contentRating,
+        "tags": this._tags,
+        "releaseYear": this._releaseDate,
+        "authors": this._authors,
+        "artists": this._artists,
+        "publicationStatus": this._publicationStatus,
+        "demographic": this._demographic,
+        "originalLanguage": this._originalLanguage,
+        "lastVolume": this._lastVolume,
+        "lastChapter": this._lastChapter
+    }
+
+    let rating = {
+        "comments": this._commentCount,
+        "follows": this._followers,
+        "rating": {
+            "average": this._ratingAverage,
+            "bayesian": this._ratingBayesian
+        }
+    }
+    return {[this._id]: {"manga": content, "rating": rating}};
   }
 }

@@ -1,4 +1,3 @@
-<app-header></app-header>
 <div>
     <h1>Our mangas:</h1>
     <select name="Sort by" id="sortMangas">
@@ -16,6 +15,27 @@
         <option value="table">Table</option>
         <option value="image">Cover with title</option>
     </select>
-    <div class="mangaOutput"></div>
+    <div class="mangaOutput">
+        <div class="manga" id="table">
+            <img class="cover" src="https://uploads.mangadex.org/covers/1044287a-73df-48d0-b0b2-5327f32dd651/e7e5e267-502f-4b77-9f19-b7ea1344f68f.jpg" alt="Manga Cover">
+            <div class="name">
+                <img class="lang" src="https://mangadex.org/img/flags/jp.svg" alt="Language icon">
+                <p>Example Title</p>
+            </div>
+            <div class="stats">
+                <div class="rating">⭐ 9.61</div>
+                <div class="follows">📎 55742</div>
+                <div class="comments">💭 158</div>
+            </div>
+            <div class="tags">
+                <div class="safe" id="tags">Safe</div>
+                <div class="suggestive" id="tags">Suggestive</div>
+                <div class="erotica" id="tags">Erotica</div>
+                <div class="tag" id="tags">Award Winning</div>
+                <div class="tag" id="tags">Official Colored</div>
+                <div class="tag" id="tags">Hirostical</div>
+            </div>
+            <div class="description">Note: Ususally there would only be one of ether "Safe", "Suggestive" or "Erotica" and up to max 3 tags. This description text will also be cut off if it goes down to the bottom border defined by the image size.</div>
+        </div>
+    </div>
 </div>
-<app-footer></app-footer>
