@@ -2,6 +2,10 @@
     display: flex;
     justify-content: space-around;
     align-items: baseline;
+    border-color: black;
+    box-shadow: 0px -5px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+
 }
 a{
     color: black;
@@ -13,3 +17,4 @@ a:hover{
     font-style: italic;
     font-weight: 10%;
 }
+//noch Zentrieren
