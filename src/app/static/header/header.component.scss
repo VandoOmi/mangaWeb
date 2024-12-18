@@ -3,8 +3,7 @@
     align-items: center;
     justify-content: space-between;
     height: 4rem;
-    border-bottom-color: rgba($color: #000000, $alpha: 0.7);
-    border-bottom: 1px;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.1);
 
     &>* {
         display: flex;
@@ -30,5 +29,22 @@
         font-size: large;   
         text-decoration: none;
         color: black;
+    }
+
+    button {
+        color: rgba(61,58,109,255);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 15px;
+        height: 3rem;
+        width: 6rem;
+    }
+
+    a {
+        color: rgba(61,58,109,255);
+        text-decoration: none;
+        font-family: glitch;
+        font-size: 2rem;
     }
 }
