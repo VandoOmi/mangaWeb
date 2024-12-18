@@ -2,15 +2,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    bottom: 0;
+    right: 0;
+    height: 4rem;
+    background-color: white;
     border-color: black;
     box-shadow: 0px -5px 5px rgba(0, 0, 0, 0.1);
     width: 100%;
-
 }
 .centerContainer{
     display: flex;
-    align-items: baseline;
     justify-content: space-around;
+    align-items: baseline;
     width: inherit;
 }
 a{
