@@ -1,10 +1,26 @@
 @font-face {
-    font-family: tan-nimbus;
-    src: url(/public/fonts/tan-nimbus.otf);
+    font-family: glitch;
+    src: url(/fonts/SDGlitch_Demo.ttf);
 }
 
-h1,h2,h3 {
-    font-family: tan-nimbus;
+body {
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0.01);
+}
+
+h1 {
+    font-family: glitch;
+    font-size: 4rem;
+}
+
+h2 {
+    font-family: glitch;
+    font-size: 3rem;
+}
+
+h3 {
+    font-family: glitch;
+    font-size: 2rem;
 }
 
 p {
