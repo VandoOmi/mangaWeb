@@ -7,7 +7,7 @@ import { CsvService } from './csv.service';
 })
 export class MangaService {
 
-    private mangaCsv = '/public/datenbank/mangas.json';
+    private mangaCsv = '/datenbank/mangas.json';
     private mangaList: Array<Manga> = [];
     
     private async readMangaList(contents?: string) {
