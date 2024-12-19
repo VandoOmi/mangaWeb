@@ -1,99 +1,88 @@
-import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable, lastValueFrom } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { Injectable, inject } from '@angular/core';
+import { Auth, createUserWithEmailAndPassword, updateProfile } from '@angular/fire/auth';
+import { collectionData, doc, Firestore, addDoc, collection, deleteDoc, updateDoc, setDoc } from '@angular/fire/firestore';
+import { getDoc } from 'firebase/firestore/lite';
+import { Observable, from, map} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(
-    private afAuth: AngularFireAuth,
-    private firestore: AngularFirestore
-  ) {}
+  firebaseAuth = inject(Auth);
+  firestore = inject(Firestore);
+  userRoleCollection = collection(this.firestore, 'user-role');
 
-  // Registrierung für normale Benutzer
-  async registerUser(email: string, password: string): Promise<void> {
-    const userCredential = await this.afAuth.createUserWithEmailAndPassword(email, password);
-    const user = userCredential.user;
-
-    if (user) {
-      // Benutzerrolle als 'user' speichern
-      await this.firestore.collection('users').doc(user.uid).set({
-        email,
-        role: 'user'
-      });
-    }
+  getUserRoles(): Observable<UserRoleInterface[]> {
+    return collectionData(this.userRoleCollection, {
+      idField: 'id'
+    }) as Observable<UserRoleInterface[]>;
   }
 
-  // Registrierung für Admins (nur für bestehende Admins erlaubt)
-  async registerAdmin(email: string, password: string): Promise<void> {
-    const currentUser = await this.afAuth.currentUser;
-
-    if (!currentUser) {
-      throw new Error('Nicht autorisiert');
-    }
-
-    // Überprüfen, ob der aktuelle Benutzer ein Admin ist
-    const userDoc = await this.firestore.collection('users').doc(currentUser.uid).get().pipe(take(1)).toPromise();
-    const userData: any = userDoc?.data();
-
-    if (!userData || userData.role !== 'admin') {
-      throw new Error('Nur Admins dürfen neue Admins registrieren');
-    }
-
-    // Admin-Benutzer erstellen
-    const userCredential = await this.afAuth.createUserWithEmailAndPassword(email, password);
-    const user = userCredential.user;
-
-    if (user) {
-      // Benutzerrolle als 'admin' speichern
-      await this.firestore.collection('users').doc(user.uid).set({
-        email,
-        role: 'admin'
-      });
-    }
-  }
-
-  // Benutzer anmelden
-  login(email: string, password: string): Promise<any> {
-    return this.afAuth.signInWithEmailAndPassword(email, password);
-  }
-
-  // Benutzer abmelden
-  logout(): Promise<void> {
-    return this.afAuth.signOut();
-  }
-
-  // Aktuellen Benutzer abrufen
-  getCurrentUser(): Observable<any> {
-    return this.afAuth.authState.pipe(
-      map(user => user ? { uid: user.uid, email: user.email } : null)
+  getUserRole(id: string) : Observable<UserRoleInterface> {
+    const docRef = doc(this.firestore, 'user-role/'+ id);
+    const promise = getDoc(docRef);
+    
+    return from(promise).pipe(
+      map((docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data();
+          return {
+            uid: docSnapshot.id,
+            email: data?.['email'] ?? '',
+            role: data?.['role'] ?? ''
+          } as UserRoleInterface;
+        } else {
+          throw new Error('Document does not exist');
+        }
+      })
     );
   }
 
-  async getCurrentUserRole(): Promise<string | null> {
-    const currentUser = await this.afAuth.currentUser;
-  
-    if (!currentUser) {
-      return null;
-    }
-  
-    const userDoc$ = this.firestore.collection('users').doc(currentUser.uid).get();
-    const userDoc = await lastValueFrom(userDoc$);
-    const userData: any = userDoc?.data();
-  
-    return userData?.role || null;
+  addUserRole(email: string, role: string): Observable<string> {
+    const userRoleToCreate = {email, role};
+    const promise = addDoc(this.userRoleCollection,userRoleToCreate).then(
+      Response => Response.id
+    );
+
+    return from(promise);
   }
 
+  removeUserRole(id: string) : Observable<void> {
+    const docRef = doc(this.firestore, 'user-role/'+ id);
+    const promise = deleteDoc(docRef);
 
-  // Benutzerrolle abrufen
-  getUserRole(uid: string): Observable<string | null> {
-    return this.firestore
-      .collection('users')
-      .doc(uid)
-      .valueChanges()
-      .pipe(map((data: any) => data?.role || null));
+    return from(promise);
   }
+
+  updateUserRole(id: string, dataToUpdate: {
+    text: string,
+    isCompleted: boolean
+  }) : Observable<void> {
+    const docRef = doc(this.firestore, 'user-role/'+ id);
+    const promise = setDoc(docRef,dataToUpdate);
+
+    return from(promise);
+  }
+
+  registerUser(email: string, username: string, password: string): Observable<void> {
+    const promise = createUserWithEmailAndPassword(
+      this.firebaseAuth,
+      email,
+      password
+    ).then(Response => updateProfile(Response.user, {displayName: username}));
+
+    return from(promise);
+  }
+}
+
+export interface UserInterface {
+  uid: string,
+  email: string,
+  username: string
+}
+
+export interface UserRoleInterface {
+  uid: string,
+  email: string
+  role: string
 }

@@ -29,7 +29,7 @@ export class AuthComponent {
     this.confirmPassword = '';
   }
 
-  async onSubmit() {
+  /*async onSubmit() {
     try {
       if (this.login) {
         // Login
@@ -48,5 +48,5 @@ export class AuthComponent {
     } catch (error: any) {
       alert('Fehler: ' + error.message);
     }
-  }
+  }*/
 }

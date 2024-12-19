@@ -3,7 +3,7 @@
       <h2 *ngIf="!login">Sign In</h2>
       <h2 *ngIf="login">Login</h2>
       <div class="login-box flex-down">
-        <form (ngSubmit)="onSubmit()">
+        <form >
           <div *ngIf="!login">
             <p>Email</p>
             <input type="email" [(ngModel)]="email" name="email" required>
