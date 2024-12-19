@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Manga } from '../../../../services/manga.service';
 
 @Component({
   selector: 'app-manga-box',
@@ -8,5 +9,5 @@ import { Component } from '@angular/core';
   styleUrl: './manga-box.component.scss'
 })
 export class MangaBoxComponent {
-  @()
+  @Input() manga!: Manga;
 }
