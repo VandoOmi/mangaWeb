@@ -15,8 +15,15 @@
         </a>
     </div>
     <div class="right">
-        <button class="login-button" routerLink="/auth">
+      @if (this.user != null) {
+        <button class="logout-button" (click)="this.authServ.logout()">
+          <p>Logout</p>
+        </button>
+      }
+      @if (this.user == null) {
+        <button class="login-button" (click)="this.router.navigateByUrl('/auth')">
             <p>Login</p>
         </button>
+      }
     </div>
 </div>
