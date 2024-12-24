@@ -24,8 +24,8 @@ export class AuthService {
     }) as Observable<UserRoleInterface[]>;
   }
 
-  getUserRole(id: string) : Observable<UserRoleInterface> {
-    const docRef = doc(this.firestore, 'user-role/'+ id);
+  getUserRole(uid: string) : Observable<UserRoleInterface> {
+    const docRef = doc(this.firestore, 'user-role/'+ uid);
     const promise = getDoc(docRef);
 
     return from(promise).pipe(
@@ -64,11 +64,10 @@ export class AuthService {
     );
   }
 
-  addUserRole(email: string, role: string): Observable<string> {
+  addUserRole(uid: string, email: string, role: string): Observable<void> {
     const userRoleToCreate = {email, role};
-    const promise = addDoc(this.userRoleCollection,userRoleToCreate).then(
-      Response => Response.id
-    );
+    const docRef = doc(this.firestore, 'user-role', uid);
+    const promise = setDoc(docRef, userRoleToCreate);
 
     return from(promise).pipe(
       catchError(error => {
@@ -102,7 +101,22 @@ export class AuthService {
       password
     ).then(
       (response) => {
-        this.addUserRole(response.user.email!, 'user');
+        this.addUserRole(response.user.uid!, response.user.email!, 'user');
+        this.currentUser.next(response.user);
+      }
+    );
+
+    return from(promise)
+  }
+
+  registerAdmin(email: string, username: string, password: string): Observable<void> {
+    const promise = createUserWithEmailAndPassword(
+      this.firebaseAuth,
+      email,
+      password
+    ).then(
+      (response) => {
+        this.addUserRole(response.user.uid!, response.user.email!, 'admin');
         this.currentUser.next(response.user);
       }
     );

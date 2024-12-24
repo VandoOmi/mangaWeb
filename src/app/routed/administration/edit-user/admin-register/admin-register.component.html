@@ -1,0 +1,26 @@
+<div class="profil">
+  <div class="auth-box">
+    <h1>Sign In</h1>
+    <form>
+      <div>
+        <p>Email</p>
+        <input type="email" [(ngModel)]="email" name="email" required>
+      </div>
+      <div>
+        <p>Benutzername</p>
+        <input type="email" [(ngModel)]="username" name="username" required>
+      </div>
+      <div>
+        <p>Passwort</p>
+        <input type="password" [(ngModel)]="password" name="password" required>
+      </div>
+      <div>
+        <p>Passwort wiederholen</p>
+        <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+      </div>
+      <div>
+        <button class="continue-button" type="submit"(click)="onSubmit()">Weiter</button>
+      </div>
+    </form>
+  </div>
+</div>

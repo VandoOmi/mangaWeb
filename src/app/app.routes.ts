@@ -5,12 +5,11 @@ import { DatenschutzComponent } from './routed/datenschutz/datenschutz.component
 import { ImpressumComponent } from './routed/impressum/impressum.component';
 import { ProductsComponent } from './routed/products/products.component';
 import { TeamComponent } from './routed/team/team.component';
-import { AddItemsComponent } from './routed/administration/add-items/add-items.component';
-import { DeleteItemsComponent } from './routed/administration/delete-items/delete-items.component';
 import { EditItemsComponent } from './routed/administration/edit-items/edit-items.component';
 import { EditUserComponent } from './routed/administration/edit-user/edit-user.component';
 import { roleGuard } from '../services/guards/role.guard';
 import { AuthComponent } from './routed/auth/auth.component';
+import { AdminRegisterComponent } from './routed/administration/edit-user/admin-register/admin-register.component';
 
 export const routes: Routes = [
   {
@@ -18,7 +17,7 @@ export const routes: Routes = [
     component: HomeComponent
   },
   {
-    path: 'administration',
+    path: 'admin',
     component: AdministraionComponent,
     canActivate: [roleGuard],
     data: { role: 'admin' },
@@ -40,20 +39,16 @@ export const routes: Routes = [
     component: TeamComponent
   },
   {
-    path: 'add-item',
-    component: AddItemsComponent
-  },
-  {
-    path: 'delete-item',
-    component: DeleteItemsComponent
-  },
-  {
-    path: 'edit-item',
+    path: 'editItem',
     component: EditItemsComponent
   },
   {
-    path: 'edit-user',
+    path: 'editAdmin',
     component: EditUserComponent
+  },
+  {
+    path: 'adminRegister',
+    component: AdminRegisterComponent
   },
   {
     path: 'auth',

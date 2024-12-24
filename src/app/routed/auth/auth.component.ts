@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-import { FormsModule } from '@angular/forms'; // Hier importieren
+import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -19,8 +19,9 @@ export class AuthComponent {
   confirmPassword: string = '';
 
   router = inject(Router);
+  authServ = inject(AuthService);
 
-  constructor(private authService: AuthService) {}
+  constructor() {}
 
   toggleLogin() {
     this.login = !this.login;
@@ -46,7 +47,7 @@ export class AuthComponent {
   onSubmit() {
     try {
       if (this.login) {
-        this.authService.login(this.email, this.password).subscribe(
+        this.authServ.login(this.email, this.password).subscribe(
           {
             next: () => {
               alert('Login erfolgreich!');
@@ -62,7 +63,7 @@ export class AuthComponent {
           alert('Passwörter stimmen nicht überein!');
           return;
         }
-        this.authService.registerUser(this.email, this.username, this.password).subscribe(
+        this.authServ.registerUser(this.email, this.username, this.password).subscribe(
           {
             next: () => {
               alert('Registrierung erfolgreich!');

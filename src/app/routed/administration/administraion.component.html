@@ -1,6 +1,4 @@
-<div>
-    <a [routerLink]="['/add-item']"  ><button>Items Hinzufügen</button></a>
-    <a [routerLink]="['/edit-item']"  ><button>Items Bearbeiten</button></a>
-    <a [routerLink]="['/delete-item']"  ><button>Items Löschen</button></a>
-    <a [routerLink]="['/edit-user']"  ><button>Benutzer Bearbeiten</button></a>
+<div class="page">
+    <button class="editItem button" [routerLink]="['/editItem']">Items verwalten</button>
+    <button class="editAdmin button" [routerLink]="['/editAdmin']">Admins verwalten</button>
 </div>

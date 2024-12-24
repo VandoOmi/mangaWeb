@@ -3,31 +3,29 @@ import { inject } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { map, switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
 
 import { Router } from '@angular/router';
+import { of, switchMap } from 'rxjs';
 
-export const roleGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
-  const afAuth = inject(AngularFireAuth);
-  const firestore = inject(AngularFirestore);
+export const roleGuard: CanActivateFn = (route) => {
+  const authServ = inject(AuthService);
   const router = inject(Router);
-  const requiredRole = route.data['role'];
 
-  return afAuth.authState.pipe(
+  return authServ.currentUser$.pipe(
     switchMap((user) => {
       if (!user) {
-        router.navigate(['']);
+        router.navigate(['/auth']);
         return of(false);
       }
-      return firestore.collection('users').doc(user.uid).valueChanges().pipe(
-        map((userData: any) => {
-          if (!userData || !userData.role || userData.role !== requiredRole) {
-            router.navigate(['']);
-            return false;
+      return authServ.getUserRole(user.uid).pipe(
+        switchMap((userRole) => {
+          if (userRole.role === 'admin') {
+            return of(true);
+          } else {
+            console.log(userRole.role + 'ist nicht autorisiert')
+            router.navigate(['/team']);
+            return of(false);
           }
-          return true;
         })
       );
     })
