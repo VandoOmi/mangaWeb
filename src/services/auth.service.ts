@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User } from '@angular/fire/auth';
-import { collectionData, doc, Firestore, addDoc, collection, deleteDoc, setDoc, getDoc } from '@angular/fire/firestore';
+import { collectionData, doc, Firestore, addDoc, collection, deleteDoc, setDoc, getDoc, getDocs } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable, catchError, from, map, mapTo, throwError} from 'rxjs';
 
 @Injectable({
@@ -19,10 +19,17 @@ export class AuthService {
   }
 
   getUserRoles(): Observable<UserRoleInterface[]> {
-    return collectionData(this.userRoleCollection, {
-      idField: 'id'
-    }) as Observable<UserRoleInterface[]>;
+    return from(getDocs(this.userRoleCollection)).pipe(
+      map((querySnapshot) => {
+        const users: UserRoleInterface[] = [];
+        querySnapshot.forEach((doc) => {
+          users.push(doc.data() as UserRoleInterface);
+        });
+        return users;
+      })
+    );
   }
+
 
   getUserRole(uid: string) : Observable<UserRoleInterface> {
     const docRef = doc(this.firestore, 'user-role/'+ uid);
@@ -84,10 +91,7 @@ export class AuthService {
     return from(promise);
   }
 
-  updateUserRole(id: string, dataToUpdate: {
-    text: string,
-    isCompleted: boolean
-  }) : Observable<void> {
+  updateUserRole(id: string, dataToUpdate: UserRoleInterface) : Observable<void> {
     const docRef = doc(this.firestore, 'user-role/'+ id);
     const promise = setDoc(docRef,dataToUpdate);
 

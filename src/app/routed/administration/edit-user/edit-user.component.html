@@ -1,13 +1,15 @@
-<div>
+<div class="box">
   <div>
     <button class="registerAdminButton" [routerLink]="['/adminRegister']">
-
+      Neuen Admin hinzufügen
     </button>
-    Registrieren von neuen Admins
   </div>
-  <div>
-    Liste von Admins
-
-    email ->> löschen
+  <div class="adminList">
+    <app-admin-line *ngFor="let admin of this.admins" [admin]="admin"></app-admin-line>
+  </div>
+  <div class="adminList">
+    <button (click)="load()">
+      Neuladen
+    </button>
   </div>
 </div>

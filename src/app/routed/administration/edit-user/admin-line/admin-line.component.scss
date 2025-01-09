@@ -1,0 +1,13 @@
+.line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 26rem;
+
+  background-color: rgba($color: #000000, $alpha: 0.05);
+
+  &>* {
+    margin: 1rem;
+  }
+}

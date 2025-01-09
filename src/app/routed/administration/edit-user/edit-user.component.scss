@@ -1,0 +1,34 @@
+.box {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  padding-left: 20rem;
+  padding-right: 20rem;
+
+  height: 50rem;
+
+  &>* {
+    margin-bottom: 1rem;
+  }
+
+  .registerAdminButton {
+    height: 4rem;
+    width: 20rem;
+
+    border-radius: 10px;
+    border-color: rgba($color: #000000, $alpha: 0.5);
+    border-width: 1px;
+
+    font-size: larger;
+  }
+
+  .adminList {
+    padding: 1rem;
+
+    border-color: #000000;
+  }
+}

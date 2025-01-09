@@ -27,16 +27,6 @@ export class AdminRegisterComponent {
     this.confirmPassword = '';
   }
 
-  resize(login:boolean) {
-    let container = document.getElementsByClassName("auth-box") as HTMLCollectionOf<HTMLElement>
-
-    if (login) {
-      container[0].style.height = "24rem";
-    } else {
-      container[0].style.height = "29rem";
-    }
-  }
-
   onSubmit() {
     try {
       if (this.password !== this.confirmPassword) {
