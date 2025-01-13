@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "ES3",
+        "module": "CommonJS",
+        "outDir": "./",
+        "noImplicitAny": true,
+        "strictNullChecks": false
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "node_moduls"
+    ]
+}
