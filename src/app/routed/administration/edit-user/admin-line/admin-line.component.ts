@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { Component, inject, Input } from '@angular/core';
-import { AuthService, UserRoleInterface } from '../../../../../services/auth.service';
+import { AuthService, UserInterface, UserRoleInterface } from '../../../../../services/auth.service';
 
 @Component({
   selector: 'app-admin-line',
@@ -15,8 +15,8 @@ export class AdminLineComponent {
   router = inject(Router);
 
   delete(): void {
-    if(confirm('Dem Benutzer '+this.admin.email+' werden alle Adminrechte entzogen.\n Ist das richtig so?')) {
-      this.authServ.removeUserRole(this.admin.uid).subscribe(() => {
+    if(confirm('Dem Benutzer '+this.admin.email+'werden alle Adminrechte entzogen.\n Ist das richtig so?')) {
+      this.authServ.removeAdminRole(this.admin).subscribe(() => {
         alert('wurde gelöscht');
         this.router.navigateByUrl('/admin');
       });

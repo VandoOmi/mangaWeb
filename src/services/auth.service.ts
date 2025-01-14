@@ -71,8 +71,8 @@ export class AuthService {
     );
   }
 
-  addUserRole(uid: string, email: string, role: string): Observable<void> {
-    const userRoleToCreate = {email, role};
+  addUserRole(uid: string, role: string): Observable<void> {
+    const userRoleToCreate = {uid,role};
     const docRef = doc(this.firestore, 'user-role', uid);
     const promise = setDoc(docRef, userRoleToCreate);
 
@@ -84,16 +84,22 @@ export class AuthService {
     );;
   }
 
-  removeUserRole(id: string) : Observable<void> {
-    const docRef = doc(this.firestore, 'user-role/'+ id);
+  removeRole(uid: string) : Observable<void> {
+    const docRef = doc(this.firestore, 'user-role/'+ uid);
     const promise = deleteDoc(docRef);
 
     return from(promise);
   }
 
-  updateUserRole(id: string, dataToUpdate: UserRoleInterface) : Observable<void> {
-    const docRef = doc(this.firestore, 'user-role/'+ id);
-    const promise = setDoc(docRef,dataToUpdate);
+  removeAdminRole(user: UserRoleInterface): Observable<void> {7
+    user.role = 'user';
+    return this.updateUserRole(user);
+  }
+
+  updateUserRole(user: UserRoleInterface) : Observable<void> {
+    const data = {email: (user.email),role: (user.role)};
+    const docRef = doc(this.firestore, 'user-role/'+ user.uid);
+    const promise = setDoc(docRef,data);
 
     return from(promise);
   }
@@ -105,7 +111,7 @@ export class AuthService {
       password
     ).then(
       (response) => {
-        this.addUserRole(response.user.uid!, response.user.email!, 'user');
+        this.addUserRole(response.user.uid!, 'user');
         this.currentUser.next(response.user);
       }
     );
@@ -120,7 +126,7 @@ export class AuthService {
       password
     ).then(
       (response) => {
-        this.addUserRole(response.user.uid!, response.user.email!, 'admin');
+        this.addUserRole(response.user.uid!, 'admin');
         this.currentUser.next(response.user);
       }
     );
