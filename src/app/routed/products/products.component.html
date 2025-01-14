@@ -10,13 +10,17 @@
         <option value="ascYear">Year Ascending</option>
         <option value="descYear">Year Descending</option>
     </select>
-    <select name="View mode" id="viewMangas">
+    <select name="View mode" id="viewMangas" (change)="onSelectionChange($event)">
         <option value="list">List</option>
         <option value="table">Table</option>
         <option value="image">Cover with title</option>
     </select>
     <div class="mangaOutput container">
-        <app-manga-box *ngFor="let manga of mangas" [manga]="manga"></app-manga-box>   
+        <app-manga-box *ngFor="let manga of mangas" [manga]="manga"></app-manga-box>
+        <app-manga-box></app-manga-box>
+        <app-manga-box></app-manga-box>
+        <app-manga-box></app-manga-box>
+        <app-manga-box></app-manga-box>
     </div>
     <p>Not done yet :c</p>
 </div>
