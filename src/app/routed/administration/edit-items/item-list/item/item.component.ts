@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Manga } from '../../../../../services/manga.service';
+import { Manga } from '../../../../../../services/manga.service';
+
 
 @Component({
   selector: 'app-item',
@@ -11,5 +12,4 @@ import { Manga } from '../../../../../services/manga.service';
 export class ItemComponent {
   @Input() item?:Manga;
 
-  
 }

@@ -72,7 +72,7 @@ export class AuthService {
   }
 
   addUserRole(uid: string, email: string, role: string): Observable<void> {
-    const userRoleToCreate = {email, role};
+    const userRoleToCreate = {role}
     const docRef = doc(this.firestore, 'user-role', uid);
     const promise = setDoc(docRef, userRoleToCreate);
 
@@ -84,9 +84,17 @@ export class AuthService {
     );;
   }
 
-  removeUserRole(id: string) : Observable<void> {
+  private removeUserRole(id: string) : Observable<void> {
     const docRef = doc(this.firestore, 'user-role/'+ id);
     const promise = deleteDoc(docRef);
+
+    return from(promise);
+  }
+
+  removeAdminRole(id: string) : Observable<void> {
+    const data : UserRoleInterface = {uid: id,role: 'user'};
+    const docRef = doc(this.firestore, 'user-role/'+ id);
+    const promise = setDoc(docRef, data);
 
     return from(promise);
   }
@@ -163,7 +171,6 @@ export interface UserInterface {
 }
 
 export interface UserRoleInterface {
-  uid: string,
-  email: string
+  uid: string
   role: string
 }

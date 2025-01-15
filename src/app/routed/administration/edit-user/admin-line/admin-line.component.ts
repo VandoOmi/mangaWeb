@@ -15,11 +15,11 @@ export class AdminLineComponent {
   router = inject(Router);
 
   delete(): void {
-    if(confirm('Dem Benutzer '+this.admin.email+' werden alle Adminrechte entzogen.\n Ist das richtig so?')) {
+    //if(confirm('Dem Benutzer '+this.admin.email+' werden alle Adminrechte entzogen.\n Ist das richtig so?')) {
       this.authServ.removeUserRole(this.admin.uid).subscribe(() => {
         alert('wurde gelöscht');
         this.router.navigateByUrl('/admin');
       });
-    }
+    //}
   }
 }
