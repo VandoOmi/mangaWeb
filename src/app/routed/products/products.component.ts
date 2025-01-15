@@ -20,4 +20,8 @@ export class ProductsComponent {
   constructor(mangaServ: MangaService) {
     this.mangas = mangaServ.mangalist;
   }
+
+  apply(style: string): void {
+    this.selectedStyle = style;
+  }
 }
