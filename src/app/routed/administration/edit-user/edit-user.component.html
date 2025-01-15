@@ -5,11 +5,6 @@
     </button>
   </div>
   <div class="adminList">
-    <app-admin-line *ngFor="let admin of this.admins" [admin]="admin"></app-admin-line>
-  </div>
-  <div class="adminList">
-    <button (click)="load()">
-      Neuladen
-    </button>
+    <app-admin-line *ngFor="let admin of this.admins" [admin]="admin" (deleteAdmin)="reload($event)"></app-admin-line>
   </div>
 </div>

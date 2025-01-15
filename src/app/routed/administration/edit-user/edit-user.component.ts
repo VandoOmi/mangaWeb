@@ -20,13 +20,27 @@ export class EditUserComponent {
   }
 
   load() {
-    this.authServ.getUserRoles().subscribe(
-      (list) => {
+    this.authServ.getUserRoles().subscribe({
+      next: (list) => {
         this.admins = list.filter((e) => e.role === 'admin');
+        alert('Benutzerrollen erfolgreich abgerufen.');
       },
-      (error) => {
+      error: (error) => {
         console.error('Fehler beim Abrufen der Benutzerrollen:', error);
       }
-    );
+    });
+  }
+
+  deleteUser(user: UserRoleInterface) {
+    this.authServ.removeAdminRole(user).subscribe({
+      next: () => this.load(),
+      error: (error) => console.error('Fehler beim Entfernen der Admin-Rolle:', error)
+    });
+  }
+
+  reload(bool: boolean): void {
+    if (bool) {
+      this.load();
+    }
   }
 }
