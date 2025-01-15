@@ -1,6 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User } from '@angular/fire/auth';
 import { collectionData, doc, Firestore, addDoc, collection, deleteDoc, setDoc, getDoc, getDocs } from '@angular/fire/firestore';
+import { updateProfile } from '@firebase/auth';
 import { BehaviorSubject, Observable, catchError, from, map, mapTo, throwError} from 'rxjs';
 
 @Injectable({
@@ -85,6 +86,7 @@ export class AuthService {
   }
 
   registerUser(email: string, username: string, password: string): Observable<void> {
+
     const promise = createUserWithEmailAndPassword(
       this.firebaseAuth,
       email,
@@ -93,8 +95,11 @@ export class AuthService {
       (response) => {
         this.addUserRole(response.user.uid!, 'user');
         this.currentUser.next(response.user);
+        return updateProfile(response.user, {displayName: username});
       }
     );
+
+
 
     return from(promise)
   }
@@ -108,6 +113,7 @@ export class AuthService {
       (response) => {
         this.addUserRole(response.user.uid!, 'admin');
         this.currentUser.next(response.user);
+        return updateProfile(response.user, {displayName: username});
       }
     );
 

@@ -9,7 +9,7 @@
         <a class="manga" routerLink="/products">
             Mangas
         </a>
-        @if (this.userRole === 'admin') {
+        @if (isCurrentUserAdmin) {
           <a class="admin" routerLink="/admin">
               Administation
           </a>
@@ -17,8 +17,8 @@
     </div>
     <div class="right">
       @if (this.user != null) {
-        <p>Willkommen {{userRole}}!</p>
-        <button class="logout-button" (click)="this.authServ.logout()">
+        <p>Willkommen {{displayname}}!</p>
+        <button class="logout-button" (click)="logout()">
           <p>Logout</p>
         </button>
       }
