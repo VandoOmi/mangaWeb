@@ -1,27 +1,30 @@
-.container{
+.container {
     display: flex;
-    justify-content: center;
     align-items: center;
-    bottom: 0;
-    right: 0;
-    background-color: white;
-    border-color: black;
-    box-shadow: 0px -5px 5px rgba(0, 0, 0, 0.1);
-    height: 4rem;
+    justify-content: center;
+    
+    height: 9vh;
     width: 100%;
+
+    background-color: white;
+    box-shadow: 0px -5px 5px rgba(0, 0, 0, 0.1);
 }
-.centerContainer{
+
+.centerContainer {
     display: flex;
     justify-content: space-around;
     align-items: baseline;
     width: inherit;
 }
-a{
+
+a {
     color: black;
+    &:active{
+        color: black;
+    }
+    &:hover{
+        font-size: 17px;
+    }
 }
-a:active{
-    color: black;
-}
-a:hover{
-    font-size: 17px;
-}
+
+

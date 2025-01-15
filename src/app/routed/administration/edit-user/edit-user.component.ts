@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AuthService, UserRoleInterface } from '../../../../services/auth.service';
+import { AuthService, UserInterface, UserRoleInterface } from '../../../../services/auth.service';
 import { AdminLineComponent } from "./admin-line/admin-line.component";
 import { NgFor } from '@angular/common';
 
@@ -16,14 +16,7 @@ export class EditUserComponent {
   admins: UserRoleInterface[] = [];
 
   ngOnInit(): void {
-    this.authServ.getUserRoles().subscribe(
-      (list) => {
-        this.admins = list.filter((e) => e.role === 'admin');
-      },
-      (error) => {
-        console.error('Fehler beim Abrufen der Benutzerrollen:', error);
-      }
-    );
+    this.load();
   }
 
   load() {

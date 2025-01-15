@@ -15,12 +15,16 @@ export class HeaderComponent {
   authServ = inject(AuthService);
   router = inject(Router)
   user: User | null = null;
+  isCurrentUserAdmin: boolean = false;
 
   constructor() {}
 
   ngOnInit(): void {
     this.authServ.currentUser$.subscribe( user => {
       this.user = user;
+    })
+    this.authServ.getUserRole(this.user?.uid || '').subscribe( user => {
+      this.isCurrentUserAdmin = user.role === 'admin';
     })
   }
 

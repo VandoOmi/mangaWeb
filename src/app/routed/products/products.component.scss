@@ -1,9 +1,23 @@
 .container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
+    width: 40vw;
+    min-width: 800px;
+    padding: 3vh;
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+.mangaOutput {
+    display: flex;
+    flex-direction: column;
+    width: 35vw;
+    min-width: 800px;
+}
+
+:app-manga-box {
+    display: flexbox;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-flow: row;
 }

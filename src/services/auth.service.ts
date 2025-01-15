@@ -51,28 +51,8 @@ export class AuthService {
     );
   }
 
-  getCurrentUserRole() : Observable<UserRoleInterface> {
-    const docRef = doc(this.firestore, 'user-role/'+ this.firebaseAuth.currentUser?.uid);
-    const promise = getDoc(docRef);
-
-    return from(promise).pipe(
-      map((docSnapshot) => {
-        if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
-          return {
-            uid: docSnapshot.id,
-            email: data?.['email'] ?? '',
-            role: data?.['role'] ?? ''
-          } as UserRoleInterface;
-        } else {
-          throw new Error('Document does not exist');
-        }
-      })
-    );
-  }
-
-  addUserRole(uid: string, email: string, role: string): Observable<void> {
-    const userRoleToCreate = {role}
+  addUserRole(uid: string, role: string): Observable<void> {
+    const userRoleToCreate = {uid,role};
     const docRef = doc(this.firestore, 'user-role', uid);
     const promise = setDoc(docRef, userRoleToCreate);
 
@@ -84,24 +64,22 @@ export class AuthService {
     );;
   }
 
-  private removeUserRole(id: string) : Observable<void> {
-    const docRef = doc(this.firestore, 'user-role/'+ id);
+  removeRole(uid: string) : Observable<void> {
+    const docRef = doc(this.firestore, 'user-role/'+ uid);
     const promise = deleteDoc(docRef);
 
     return from(promise);
   }
 
-  removeAdminRole(id: string) : Observable<void> {
-    const data : UserRoleInterface = {uid: id,role: 'user'};
-    const docRef = doc(this.firestore, 'user-role/'+ id);
-    const promise = setDoc(docRef, data);
-
-    return from(promise);
+  removeAdminRole(user: UserRoleInterface): Observable<void> {7
+    user.role = 'user';
+    return this.updateUserRole(user);
   }
 
-  updateUserRole(id: string, dataToUpdate: UserRoleInterface) : Observable<void> {
-    const docRef = doc(this.firestore, 'user-role/'+ id);
-    const promise = setDoc(docRef,dataToUpdate);
+  updateUserRole(user: UserRoleInterface) : Observable<void> {
+    const data = {email: (user.email),role: (user.role)};
+    const docRef = doc(this.firestore, 'user-role/'+ user.uid);
+    const promise = setDoc(docRef,data);
 
     return from(promise);
   }
@@ -113,7 +91,7 @@ export class AuthService {
       password
     ).then(
       (response) => {
-        this.addUserRole(response.user.uid!, response.user.email!, 'user');
+        this.addUserRole(response.user.uid!, 'user');
         this.currentUser.next(response.user);
       }
     );
@@ -128,7 +106,7 @@ export class AuthService {
       password
     ).then(
       (response) => {
-        this.addUserRole(response.user.uid!, response.user.email!, 'admin');
+        this.addUserRole(response.user.uid!, 'admin');
         this.currentUser.next(response.user);
       }
     );
