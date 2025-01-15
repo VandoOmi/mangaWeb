@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 })
 export class ProductsComponent {
   router = inject(Router);
+  mangaServ = inject(MangaService);
 
   openDetail() {
     this.router.navigateByUrl('detailManga');
@@ -25,5 +26,6 @@ export class ProductsComponent {
 
   apply(style: string): void {
     this.selectedStyle = style;
+    
   }
 }
