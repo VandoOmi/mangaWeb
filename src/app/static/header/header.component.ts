@@ -33,6 +33,4 @@ export class HeaderComponent {
     var route = selectValue.value;
     if (route) this.router.navigate([route]);
   }
-
-  
 }
