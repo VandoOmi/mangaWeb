@@ -10,6 +10,7 @@ import { EditUserComponent } from './routed/administration/edit-user/edit-user.c
 import { roleGuard } from '../services/guards/role.guard';
 import { AuthComponent } from './routed/auth/auth.component';
 import { AdminRegisterComponent } from './routed/administration/edit-user/admin-register/admin-register.component';
+import { DetailMangaComponent } from './routed/detail-manga/detail-manga.component';
 
 export const routes: Routes = [
   {
@@ -33,6 +34,10 @@ export const routes: Routes = [
   {
     path: 'products',
     component: ProductsComponent
+  },
+  {
+    path: 'detailManga',
+    component: DetailMangaComponent
   },
   {
     path: 'team',

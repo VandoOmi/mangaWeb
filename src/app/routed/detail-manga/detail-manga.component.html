@@ -1,0 +1,32 @@
+<img class="cover" src="{{this.manga.currentCover}}" alt="Manga Cover">
+<div class="name">
+    <img class="lang" src="/img/{{this.manga.originalLanguage}}.svg" alt="language icon">
+    <div>{{this.manga.defaultTitle}}</div>
+    <div *ngFor="let title of this.manga.germanTitle">{{title}}</div>
+    <div *ngFor="let title of this.manga.originalTitle">{{title}}</div>
+</div>
+<div class="stats">
+    <div class="rating">⭐ {{this.manga.ratingAverage}} / {{this.manga.ratingBayesian}}</div>
+    <div class="follows">📎 {{this.manga.followers}}</div>
+    <div class="comments">💭 {{this.manga.commentCount}}</div>
+    <div class="publication">{{this.manga.publicationStatus}}</div>
+</div>
+<div>
+    <div class="author tag" *ngFor="let artist of this.manga.artists">{{artist}}</div>
+    <br>
+    <div class="author tag" *ngFor="let author of this.manga.authors">{{author}}</div>
+</div>
+<div id="tags">
+    <div class="tags {{this.manga.contentRating}}" >{{(this.manga.contentRating.charAt(0).toUpperCase() + this.manga.contentRating.slice(1))}}</div>
+    <div class="tags">{{this.manga.demographic}}</div>
+    <br>
+    <div class="tags tag" *ngFor="let tag of this.manga.tags">{{tag}}</div>
+</div>
+<div id="tags">
+    <div class="tags tag">{{this.manga.lastVolume}} {{this.manga.lastChapter}}</div>
+    <div class="tags tag">{{this.manga.releaseDate}}</div>
+    <div class="tags tag">{{this.manga.publicationStatus}}</div>
+    <div class="tags tag">{{this.manga.demographic}}</div>
+</div>
+<div class="description">{{this.manga.description}}</div>
+<a href="http://mangadex.org/title/{{this.manga.id}}">Read on MangaDex</a>
