@@ -1,7 +1,4 @@
 .name {
-    display: flex;
-    flex-wrap: wrap;
-    grid-area: 1 / 2;
     height: 10%;
     padding-top: 0%;
     padding-bottom: 0%;
@@ -19,26 +16,27 @@
     padding-bottom: 0%;
     height: fit-content;
 }
+/*
 .description {
-    display: -webkit-box; 
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    grid-area: 4 / 2;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+*/
 .cover {
     height: 150px;
     width: 105px;
     border-radius: 10px;
-    grid-area: 1 / 1 / span 4 / 1;
     padding-right: 5px;
 }
 .stats {
     display: flex;
     flex-direction: row;
     gap: 3px;
-    grid-area: 2 / 2;
     height: fit-content;
     padding-top: 0%;
     padding-bottom: 0%;
@@ -47,7 +45,6 @@
     display: flex;
     flex-direction: row;
     gap: 3px;
-    grid-area: 3 / 2;
     height: fit-content;
     padding-top: 0%;
     padding-bottom: 0%;
@@ -73,9 +70,4 @@
 .tag {
     background-color: rgb(100, 100, 100);
     color: rgb(210, 210, 210);
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }

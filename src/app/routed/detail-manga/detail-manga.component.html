@@ -9,24 +9,23 @@
     <div class="rating">⭐ {{this.manga.ratingAverage}} / {{this.manga.ratingBayesian}}</div>
     <div class="follows">📎 {{this.manga.followers}}</div>
     <div class="comments">💭 {{this.manga.commentCount}}</div>
-    <div class="publication">{{this.manga.publicationStatus}}</div>
+    <div class="{{this.manga.publicationStatus}}">{{(this.manga.publicationStatus.charAt(0).toUpperCase() + this.manga.publicationStatus.slice(1))}}</div>
 </div>
-<div>
-    <div class="author tag" *ngFor="let artist of this.manga.artists">{{artist}}</div>
+<div class="artist">
+    <div class="tag tags" *ngFor="let artist of this.manga.artists">{{artist}}</div>
     <br>
-    <div class="author tag" *ngFor="let author of this.manga.authors">{{author}}</div>
+    <div class="tag tags" *ngFor="let author of this.manga.authors">{{author}}</div>
 </div>
 <div id="tags">
     <div class="tags {{this.manga.contentRating}}" >{{(this.manga.contentRating.charAt(0).toUpperCase() + this.manga.contentRating.slice(1))}}</div>
-    <div class="tags">{{this.manga.demographic}}</div>
+    <div class="tags tag">{{this.manga.demographic}}</div>
     <br>
     <div class="tags tag" *ngFor="let tag of this.manga.tags">{{tag}}</div>
 </div>
 <div id="tags">
     <div class="tags tag">{{this.manga.lastVolume}} {{this.manga.lastChapter}}</div>
     <div class="tags tag">{{this.manga.releaseDate}}</div>
-    <div class="tags tag">{{this.manga.publicationStatus}}</div>
-    <div class="tags tag">{{this.manga.demographic}}</div>
+    <div class="tags tag">{{(this.manga.demographic.charAt(0).toUpperCase() + this.manga.demographic.slice(1))}}</div>
 </div>
 <div class="description">{{this.manga.description}}</div>
 <a href="http://mangadex.org/title/{{this.manga.id}}">Read on MangaDex</a>
