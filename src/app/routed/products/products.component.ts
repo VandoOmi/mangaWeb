@@ -13,21 +13,23 @@ import { Router } from '@angular/router';
 })
 export class ProductsComponent {
   router = inject(Router);
+  mangaServ = inject(MangaService);
 
   openDetail() {
     this.router.navigateByUrl('detailManga');
   }
-  mangas: Manga[];
-  selectedStyle: string = 'style1'; 
-  onSelectionChange(event: Event) { 
-    const selectElement = event.target as HTMLSelectElement; 
-    this.selectedStyle = selectElement.value; 
-  }
-  constructor(mangaServ: MangaService) {
-    this.mangas = mangaServ.mangalist;
+  mangas: Manga[]=[];
+  selectedStyle: string = 'list'; 
+  constructor() {}
+
+  ngOnInit(): void {
+    /*this.mangaServ.getMangas().subscribe(mangalist => {
+      this.mangas = mangalist;
+    })*/
   }
 
   apply(style: string): void {
     this.selectedStyle = style;
+    
   }
 }

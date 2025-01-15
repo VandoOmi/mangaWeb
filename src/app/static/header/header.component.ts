@@ -15,7 +15,7 @@ export class HeaderComponent {
   authServ = inject(AuthService);
   router = inject(Router)
   user: User | null = null;
-  isCurrentUserAdmin: boolean = false;
+  userRole: string = 'undefind';
 
   constructor() {}
 
@@ -23,9 +23,16 @@ export class HeaderComponent {
     this.authServ.currentUser$.subscribe( user => {
       this.user = user;
     })
-    this.authServ.getUserRole(this.user?.uid || '').subscribe( user => {
-      this.isCurrentUserAdmin = user.role === 'admin';
-    })
+    if (this.user != null)
+    {
+      this.authServ.getUserRole(this.user?.uid).subscribe( data => {
+        this.userRole = data.role;
+      })
+    }
+  }
+
+  ngOnDestroy(): void {
+
   }
 
   navigateTo(e: Event) {

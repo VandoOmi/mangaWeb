@@ -32,7 +32,7 @@ export class AuthService {
 
 
   getUserRole(uid: string) : Observable<UserRoleInterface> {
-    const docRef = doc(this.firestore, 'user-role/'+ uid);
+    const docRef = doc(this.firestore, 'user-role/', uid);
     const promise = getDoc(docRef);
 
     return from(promise).pipe(

@@ -1,23 +1,34 @@
 <div class="container">
     <h1>Our mangas:</h1>
-    <select name="Sort by" id="sortMangas">
-        <option value="ascTitle">Title Ascending</option>
-        <option value="descTitle">Title Descending</option>
-        <option value="highRating">Highest Rating</option>
-        <option value="lowRating">Lowest Rating</option>
-        <option value="mostFollows">Most Follows</option>
-        <option value="fewFollow">Fewest Follows</option>
-        <option value="ascYear">Year Ascending</option>
-        <option value="descYear">Year Descending</option>
-    </select>
-    <select name="View mode" id="viewMangas" (change)="onSelectionChange($event)">
-        <option value="list" (click)="apply('list')">List</option>
-        <option value="table" (click)="apply('table')">Table</option>
-        <option value="image" (click)="apply('image')">Cover with title</option>
-    </select>
+    <div class="filter">
+        <select name="Sort by" id="sortMangas">
+            <option value="ascTitle">Title Ascending</option>
+            <option value="descTitle">Title Descending</option>
+            <option value="highRating">Highest Rating</option>
+            <option value="lowRating">Lowest Rating</option>
+            <option value="mostFollows">Most Follows</option>
+            <option value="fewFollow">Fewest Follows</option>
+            <option value="ascYear">Year Ascending</option>
+            <option value="descYear">Year Descending</option>
+        </select>
+        <div class="buttons">
+            <button value="list" (click)="apply('list')">
+                <img src="./svgs/lines.svg" alt="Liste">
+            </button>
+            <button value="table" (click)="apply('table')">
+                <img src="./svgs/bigboxes.svg" alt="Liste">
+            </button>
+            <button value="image" (click)="apply('image')">
+                <img src="./svgs/boxes.svg" alt="Liste">
+            </button>
+        </div>
+    </div>
     <div class="mangaOutput">
-        <app-manga-box ></app-manga-box>
-
+        <app-manga-box *ngFor="let manga of mangas" [manga]="manga" [selectedStyle]="selectedStyle"></app-manga-box>
+        <app-manga-box [selectedStyle]="selectedStyle"></app-manga-box>
+        <app-manga-box [selectedStyle]="selectedStyle"></app-manga-box>
+        <app-manga-box [selectedStyle]="selectedStyle"></app-manga-box>
+        <app-manga-box [selectedStyle]="selectedStyle"></app-manga-box>
     </div>
     <p>Not done yet :c</p>
 </div>

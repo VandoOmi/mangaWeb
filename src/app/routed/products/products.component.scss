@@ -8,16 +8,17 @@
     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
 }
 
+.filter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 1vh;
+}
+
 .mangaOutput {
     display: flex;
     flex-direction: column;
     width: 35vw;
     min-width: 800px;
-}
-
-:app-manga-box {
-    display: flexbox;
-    flex-direction: row;
-    flex-wrap: wrap;
-    flex-flow: row;
 }
