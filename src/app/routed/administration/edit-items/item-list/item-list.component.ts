@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { Manga, MangaService } from '../../../../services/manga.service';
+import { Component, inject } from '@angular/core';
 import { ItemComponent } from "./item/item.component";
 import { NgForOf } from '@angular/common';
+import { Manga, MangaService } from '../../../../../services/manga.service';
 
 @Component({
   selector: 'app-item-list',
@@ -11,10 +11,12 @@ import { NgForOf } from '@angular/common';
   styleUrl: './item-list.component.scss'
 })
 export class ItemListComponent {
+  private mangaServ: MangaService = inject(MangaService);
+  mangaList: Manga[] = [];
+  
+  constructor() {}
 
-  mangaList: Array<Manga>;
-
-  constructor(mangaServ: MangaService) {
-    this.mangaList = mangaServ.mangalist || [];
+  ngOnInit(): void {
+    this.mangaList = this.mangaServ.getMangaList();
   }
 }

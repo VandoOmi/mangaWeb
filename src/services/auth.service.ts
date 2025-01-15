@@ -150,6 +150,6 @@ export interface UserInterface {
 
 export interface UserRoleInterface {
   uid: string,
-  email: string
+  email: string,
   role: string
 }
