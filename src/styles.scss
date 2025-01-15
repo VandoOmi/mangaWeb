@@ -3,11 +3,6 @@
     src: url(/fonts/Lunar_Escape.otf);
 }
 
-body {
-    margin: 0;
-    background-color: rgba(0, 0, 0, 0.01);
-}
-
 h1 {
     font-family: glitch;
     font-size: 3rem;
@@ -25,4 +20,9 @@ h3 {
 
 p {
     font-family: Arial, Helvetica, sans-serif;
+}
+
+html, body {
+    min-height: 100vh;
+    margin: 0;
 }

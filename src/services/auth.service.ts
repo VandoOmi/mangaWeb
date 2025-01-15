@@ -51,26 +51,6 @@ export class AuthService {
     );
   }
 
-  getCurrentUserRole() : Observable<UserRoleInterface> {
-    const docRef = doc(this.firestore, 'user-role/'+ this.firebaseAuth.currentUser?.uid);
-    const promise = getDoc(docRef);
-
-    return from(promise).pipe(
-      map((docSnapshot) => {
-        if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
-          return {
-            uid: docSnapshot.id,
-            email: data?.['email'] ?? '',
-            role: data?.['role'] ?? ''
-          } as UserRoleInterface;
-        } else {
-          throw new Error('Document does not exist');
-        }
-      })
-    );
-  }
-
   addUserRole(uid: string, role: string): Observable<void> {
     const userRoleToCreate = {uid,role};
     const docRef = doc(this.firestore, 'user-role', uid);

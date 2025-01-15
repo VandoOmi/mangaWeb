@@ -1,15 +1,8 @@
-body {
-    font-family: tan-nimbus;
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
-    color: #333;
-}
 .container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    max-width: 40vw;
+    padding: 3vh;
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
