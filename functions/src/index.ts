@@ -1,5 +1,5 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore, doc, setDoc, getDoc,collection,query,where, getDocs,deleteDoc} from "firebase/firestore";
+import { initializeApp } from "firebase/app"; //mich fucked es ab das ich hier nen Fehler habe (Miguel)
+import { getFirestore, doc, setDoc, getDoc,collection,query,where, getDocs,deleteDoc} from "firebase/firestore"; //mich fucked es ab das ich hier nen Fehler habe (Miguel)
 import { firebaseConfig } from "../../src/app/app.config";
 import { Manga_DB } from "../../src/services/manga.service";
 
@@ -61,7 +61,7 @@ export const getAllMangas = async (): Promise<Manga_DB[]> => {
     try {
         const mangaDatabase = collection(db, "manga-data");
         const queryPreview = await getDocs(mangaDatabase);
-        const mangas: Manga_DB[] = queryPreview.docs.map((doc => doc.data() as Manga_DB);
+        const mangas: Manga_DB[] = queryPreview.docs.map((doc => doc.data() as Manga_DB)); //mich fucked es ab das ich hier nen Fehler habe (Miguel)
         return mangas;
     } catch (error) {
         console.error("Fehler beim Abrufen der Mangas: ", error);

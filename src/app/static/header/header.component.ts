@@ -20,12 +20,14 @@ export class HeaderComponent {
   constructor() {}
 
   ngOnInit(): void {
-    this.authServ.currentUser$.subscribe( user => {
+    this.authServ.currentUser$.subscribe(user => {
       this.user = user;
-    })
-    this.authServ.getUserRole(this.user?.uid || '').subscribe( user => {
-      this.isCurrentUserAdmin = user.role === 'admin';
-    })
+      if (this.user?.uid) {
+          this.authServ.getUserRole(this.user.uid).subscribe(userRole => {
+              this.isCurrentUserAdmin = userRole.role === 'admin';
+          });
+      }
+  });
   }
 
   navigateTo(e: Event) {

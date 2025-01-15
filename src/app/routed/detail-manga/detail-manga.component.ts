@@ -1,5 +1,5 @@
 import { Component, Injectable, Input } from '@angular/core';
-import { Manga } from '../../../services/manga.service';
+import { Manga_Dex } from '../../../services/manga.service';
 import { NgFor } from '@angular/common';
 
 @Component({
@@ -10,5 +10,5 @@ import { NgFor } from '@angular/common';
   styleUrl: './detail-manga.component.scss'
 })
 export class DetailMangaComponent {
-  @Input() manga!: Manga;
+  @Input() manga!: Manga_Dex;
 }
