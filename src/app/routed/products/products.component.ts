@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MangaBoxComponent, MangaBoxModule } from "./manga-box/manga-box.component";
 import { Manga, MangaService } from '../../../services/manga.service';
 import { NgFor } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-products',
@@ -11,6 +12,11 @@ import { NgFor } from '@angular/common';
   styleUrl: './products.component.scss'
 })
 export class ProductsComponent {
+  router = inject(Router);
+
+  openDetail() {
+    this.router.navigateByUrl('detailManga');
+  }
   mangas: Manga[];
   selectedStyle: string = 'style1'; 
   onSelectionChange(event: Event) { 
