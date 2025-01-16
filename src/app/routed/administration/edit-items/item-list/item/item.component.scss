@@ -6,4 +6,11 @@
     height: 10vh;
     border: 1px solid black;
 
+    .buttons {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 20%;
+    }
+
 }

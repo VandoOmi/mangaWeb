@@ -28,4 +28,8 @@ export class ItemListComponent {
       }
     });
   }
+
+  reload(event: boolean): void {
+    this.ngOnInit();
+  }
 }

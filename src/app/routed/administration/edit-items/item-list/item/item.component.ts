@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { MangaService, Manga_DB } from '../../../../../../services/manga.service';
 import { Router } from '@angular/router';
 
@@ -15,6 +15,7 @@ export class ItemComponent {
   mangaServ = inject(MangaService)
   router = inject(Router);
   @Input() item!:Manga_DB;
+  @Output() load = new EventEmitter<boolean>();
 
   edit(): void {
     this.router.navigateByUrl('/editItem');
@@ -22,5 +23,6 @@ export class ItemComponent {
 
   delete():void {
     this.mangaServ.deleteManga(this.item.manga_id).subscribe();
+    this.load.emit(true);
   }
 }

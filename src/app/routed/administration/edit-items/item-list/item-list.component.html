@@ -1,3 +1,4 @@
 <div class="container">
-    <app-item *ngFor="let item of mangaList" [item]="item"></app-item>
+    <app-item *ngFor="let item of mangaList" [item]="item" (load)="reload($event)"></app-item>
 </div>
+
