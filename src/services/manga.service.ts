@@ -1,7 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import { CsvService } from './csv.service';
-import { Observable, elementAt, from, map, forkJoin, of } from 'rxjs';
-import { Firestore, doc, getDoc, collection, query, setDoc, where, docSnapshots, deleteDoc, getDocs } from '@angular/fire/firestore';
+import { Observable, from, map, forkJoin, of } from 'rxjs';
+import { Firestore, doc, getDoc, collection, setDoc, deleteDoc, getDocs } from '@angular/fire/firestore';
 import { HttpClient } from '@angular/common/http';
 import axios from 'axios'; //muss installiert werden npm install axios 
 import { switchMap } from 'rxjs/operators';
@@ -91,7 +90,6 @@ export class MangaService {
     // Laden der 10 bestbewerteten Mangas in Mangadex und auch speichern dieser
     getTopRatedManga_Dex(): Observable<Manga_Dex[]> {
         const url = `${this.BASE_URL}/manga?order[rating]=desc&limit=10`;
-
         return from(axios.get(url)).pipe(
             switchMap(response => {
                 //API-Daten zu Manga_Dex
@@ -101,7 +99,6 @@ export class MangaService {
                     title: manga.defaultTitle,
                     cover_url: manga.currentCover
                 }));
-
                 return forkJoin(mangaObservables).pipe(
                     map(() => topRatedMangas) // Hier geben wir die Liste der Manga_Dex zurück
                 );
@@ -112,7 +109,6 @@ export class MangaService {
     // Laden der 10 zuletzt hochgeladenen Mangas in Mangadex und auch speichern dieser
     getLatestManga_Dex(): Observable<Manga_Dex[]> {
         const url = `${this.BASE_URL}/manga?order[uploaded_at]=desc&limit=10`;
-
         return from(axios.get(url)).pipe(
             switchMap(response => {
                 //API-Daten zu Manga_Dex

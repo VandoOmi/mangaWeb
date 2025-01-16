@@ -1,20 +1,28 @@
 <div class="header">
     <div class="left">
+      <div class="HomeSize">
       <a routerLink="'/home'">
           <img class="logo" src="favicon.ico" alt="Logo">
       </a>
+    </div>
+    <div class="werSindWirSize">
       <a class="team" routerLink="/team">
         Wer Sind Wir?
       </a>
+    </div>
+    <div class="mangaSize">
       <a class="manga" routerLink="/products">
           Mangas
       </a>
+    </div>
+    <div class="</div>">
       @if (isCurrentUserAdmin) {
         <a class="admin" routerLink="/admin">
             Administation
         </a>
       }
     </div>
+  </div>
     <div class="right">
       @if (this.user != null) {
         <p>Willkommen {{displayname}}!</p>
