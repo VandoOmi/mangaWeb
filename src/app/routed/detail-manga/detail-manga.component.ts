@@ -55,6 +55,7 @@ export class DetailMangaComponent {
     originalLanguage: "ja",
     lastVolume: 24,
     lastChapter: 95,
-    ratingBayesian: 9.605691153759626
-  };;
+    ratingBayesian: 9.605691153759626,
+    availableTranslatedLanguages: []
+  };
 }
