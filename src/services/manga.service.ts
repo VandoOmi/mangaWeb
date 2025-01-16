@@ -4,6 +4,7 @@ import { Firestore, doc, getDoc, collection, setDoc, deleteDoc, getDocs } from '
 import { HttpClient } from '@angular/common/http';
 import axios from 'axios'; //muss installiert werden npm install axios 
 import { switchMap } from 'rxjs/operators';
+import { limit } from 'firebase/firestore';
 @Injectable({
     providedIn: 'root'
 })
@@ -65,7 +66,7 @@ export class MangaService {
     // laden der mangadex api daten 
     getManga_DexById(mangaId: string): Observable<Manga_Dex> {
         return from(axios.get(`${this.BASE_URL}/manga/${mangaId}`)).pipe(
-            map(response => this.mapMangaData(response.data))
+            switchMap(response => from(this.mapMangaData(response.data)))
         );
     }
 
@@ -108,11 +109,21 @@ export class MangaService {
 
     // Laden der 10 zuletzt hochgeladenen Mangas in Mangadex und auch speichern dieser
     getLatestManga_Dex(): Observable<Manga_Dex[]> {
-        const url = `${this.BASE_URL}/manga?order[uploaded_at]=desc&limit=10`;
-        return from(axios.get(url)).pipe(
+        const tempM =  axios({
+            method: 'get',
+            url: 'https://api.mangadex.org/manga',
+            params:{
+                limit: 10,
+                order: {latestUploadedChapter: 'desc'},
+                includes: ["cover_art", "author", "artist", "tag"]
+            }
+        })
+        
+
+        return from(tempM).pipe(
             switchMap(response => {
                 //API-Daten zu Manga_Dex
-                const latestMangas = response.data.data.map((manga: any) => this.mapMangaData(manga));
+                const latestMangas = response.data.data.map((manga: Manga_Dex) => this.mapMangaData(manga));
                 const mangaObservables: Observable<void>[] = latestMangas.map((manga: Manga_Dex) => this.createManga_Db({
                     manga_id: manga.id,
                     title: manga.defaultTitle,
@@ -178,17 +189,45 @@ export class MangaService {
     //help functions
 
     //api daten zu mangadex daten (interface)
-    private mapMangaData(apiData: any): Manga_Dex {
-        const attributes = apiData.data.attributes;
-        const relationships = apiData.data.relationships;
+    private async mapMangaData(apiData: any): Promise<Manga_Dex> {
+        const attributes = apiData.attributes;
+        const relationships = apiData.relationships;
 
         const coverFileName = relationships.find(
             (rel: any) => rel.type === 'cover_art'
         )?.attributes?.fileName;
         const coverUrl = coverFileName
-            ? `https://uploads.mangadex.org/covers/${apiData.data.id}/${coverFileName}`
+            ? `https://uploads.mangadex.org/covers/${apiData.id}/${coverFileName}`
             : '';
         const availableTranslatedLanguages = attributes.availableTranslatedLanguages || [];
+        const tempR = axios({
+            method: 'GET',
+            url: `${this.BASE_URL}/statistics/manga`,
+            params: {
+                manga: apiData.data.map((manga: { id: string; }) => manga.id)
+            },
+            validateStatus: function (status) {
+                return status === 400 || (status >= 200 && status < 300); // Accept status codes 200-299 and 400
+            }});
+            let ratingAverage = {
+                "rating": {
+                    average: (await (tempR)).data.statistics[apiData.manga_id].rating.average
+                }
+            }
+let followers ={
+    "followers": {
+        "total": (await (tempR)).data.statistics[apiData.manga_id].followers.total
+    }
+}
+let comments ={
+    "comments": {
+        "total": (await (tempR)).data.statistics[apiData.manga_id].comments.repliesCount
+    }}
+    let ratingBayesian ={
+        "rating": {
+            "bayesian": (await (tempR)).data.statistics[apiData.manga_id].rating.bayesian
+        }
+    }
         return {
             id: apiData.data.id,
             defaultTitle: attributes.title.en || '',
@@ -198,7 +237,7 @@ export class MangaService {
             description: attributes.description.en || '',
             contentRating: attributes.contentRating || '',
             tags: attributes.tags.map((tag: any) => tag.attributes.name.en || ''),
-            ratingAverage: attributes.rating ? attributes.rating.average : 0,
+            ratingAverage: ratingAverage.rating.average || 0,
             releaseDate: attributes.year || '',
             authors: relationships
                 .filter((rel: any) => rel.type === 'author')
@@ -207,13 +246,13 @@ export class MangaService {
                 .filter((rel: any) => rel.type === 'artist')
                 .map((artist: any) => artist.attributes.name),
             publicationStatus: attributes.status || '',
-            followers: attributes.followers || 0,
-            commentCount: attributes.comments || 0,
+            followers:followers.followers.total || 0,
+            commentCount:comments.comments.total || 0,
             demographic: attributes.publicationDemographic || '',
             originalLanguage: attributes.originalLanguage || '',
             lastVolume: parseInt(attributes.lastVolume, 10) || 0,
             lastChapter: parseInt(attributes.lastChapter, 10) || 0,
-            ratingBayesian: attributes.rating ? attributes.rating.bayesian : 0,
+            ratingBayesian: ratingBayesian.rating.bayesian || 0,
             availableTranslatedLanguages: availableTranslatedLanguages,
 
         };
