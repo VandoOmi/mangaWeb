@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, User } from '@angular/fire/auth';
 import { doc, Firestore, collection, deleteDoc, setDoc, getDoc, getDocs } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable, catchError, from, map, throwError} from 'rxjs';
 
@@ -51,9 +51,9 @@ export class AuthService {
     );
   }
 
-  addUserRole(uid: string, email: string, role: string): Observable<void> {
-    const userRoleToCreate = {uid,role};
-    const docRef = doc(this.firestore, 'user-role', uid);
+  addUserRole(user: User, role: string): Observable<void> {
+    const userRoleToCreate = {email:user.email, role: role};
+    const docRef = doc(this.firestore, 'user-role', user.uid);
     const promise = setDoc(docRef, userRoleToCreate);
 
     return from(promise).pipe(
