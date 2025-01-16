@@ -1,9 +1,8 @@
 <div class="list">
-    <div class="head box">
-        <img class="cover" src="{{this.manga.currentCover}}" alt="Manga Cover">
-        <img class="lang" src="/img/{{this.manga.originalLanguage}}.svg" alt="language icon">
+    <div class="head box link">
+        <a class="tags tag" href="http://mangadex.org/title/{{this.manga.id}}"><img class="cover" src="https://og.mangadex.org/og-image/manga/{{this.manga.id}}" alt="Big Cover"></a>
         <div class="name" id="tags">
-            <p class="tag tags">{{this.manga.defaultTitle}}</p>
+            <p class="tags safe">Alternate titles:</p>
             @if (this.manga.germanTitle.length > 0) {
                 <p class="tag tags" *ngFor="let title of this.manga.germanTitle">{{title}}</p>
             }
@@ -12,35 +11,40 @@
     </div>
     <div class="subHead box">
         <div id="tags">
-            <p>Ratings:</p>
+            <p class="safe tags">Stats:</p>
             <p class="tag tags">⭐ {{this.manga.ratingAverage.toFixed(2)}} / {{this.manga.ratingBayesian.toFixed(2)}}</p>
             <p class="tag tags">📎 {{this.manga.followers}}</p>
             <p class="tag tags">💭 {{this.manga.commentCount}}</p>
             <p class="tag tags">
-                Publication: 
-                {{this.manga.releaseDate}}
                 @if (this.manga.publicationStatus == "ongoing") {
-                    🟢 {{(this.manga.publicationStatus.charAt(0).toUpperCase() + this.manga.publicationStatus.slice(1))}}
+                    🟢 Publication: {{this.manga.releaseDate}} {{(this.manga.publicationStatus.charAt(0).toUpperCase() + this.manga.publicationStatus.slice(1))}}
                 }
                 @if (this.manga.publicationStatus == "hitaitus") {
-                    🟡 {{(this.manga.publicationStatus.charAt(0).toUpperCase() + this.manga.publicationStatus.slice(1))}}
+                    🟡 Publication: {{this.manga.releaseDate}} {{(this.manga.publicationStatus.charAt(0).toUpperCase() + this.manga.publicationStatus.slice(1))}}
                 }
                 @if (this.manga.publicationStatus == "cancelled") {
-                    🔴 {{(this.manga.publicationStatus.charAt(0).toUpperCase() + this.manga.publicationStatus.slice(1))}}
+                    🔴 Publication: {{this.manga.releaseDate}} {{(this.manga.publicationStatus.charAt(0).toUpperCase() + this.manga.publicationStatus.slice(1))}}
                 }
                 @if (this.manga.publicationStatus == "completed") {
-                    🔵 {{(this.manga.publicationStatus.charAt(0).toUpperCase() + this.manga.publicationStatus.slice(1))}}
+                    🔵 Publication: {{this.manga.releaseDate}} {{(this.manga.publicationStatus.charAt(0).toUpperCase() + this.manga.publicationStatus.slice(1))}}
                 }
             </p>
+            @if (this.manga.lastVolume != 0) {
+                <p class="tags tag">Volumes: {{this.manga.lastVolume}}</p>
+            }
+            @if (this.manga.lastChapter != 0) {
+                <p class="tags tag">Chapters: {{this.manga.lastChapter}}</p>
+            }
+            <p *ngIf="['shounen', 'shoujo', 'josei', 'seinen'].includes(this.manga.demographic)" class="tags tag">{{(this.manga.demographic.charAt(0).toUpperCase() + this.manga.demographic.slice(1))}}</p>
         </div>
         <div id="tags">
             @if (this.manga.artists.length > 0) {
-                <p>Atist(s):</p>
+                <p class="safe tags">Artist@if (this.manga.artists.length > 1) {s}:</p>
                 <p class="tag tags" *ngFor="let artist of this.manga.artists">{{artist}}</p>
             }
             <br>
             @if (this.manga.authors.length > 0) {
-                <p>Author(s):</p>
+                <p class="safe tags">Author@if (this.manga.authors.length > 1) {s}:</p>
                 <p class="tag tags" *ngFor="let author of this.manga.authors">{{author}}</p>
             }
         </div>
@@ -48,11 +52,6 @@
             <p class="tags {{this.manga.contentRating}}" >{{(this.manga.contentRating.charAt(0).toUpperCase() + this.manga.contentRating.slice(1))}}</p>
             <br>
             <p class="tags tag" *ngFor="let tag of this.manga.tags">{{tag}}</p>
-        </div>
-        <div id="tags">
-            <p class="tags tag">Volumes: {{this.manga.lastVolume}}</p>
-            <p class="tags tag">Chapters: {{this.manga.lastChapter}}</p>
-            <p *ngIf="['shounen', 'shoujo', 'josei', 'seinen'].includes(this.manga.demographic)" class="tags tag">{{(this.manga.demographic.charAt(0).toUpperCase() + this.manga.demographic.slice(1))}}</p>
         </div>
     </div>
     <div class="box">

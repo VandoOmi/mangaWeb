@@ -3,14 +3,14 @@
     border-radius: 15px;
     border-bottom: 5px;
     border-right: 5px;
-    background-color: rgba(128, 128, 128, 0.5);
+    background-color: rgba($color: #000000, $alpha: 0.1);
     margin-bottom: 10px;
     padding: 10px;
 }
 .head {
     .cover {
-        height: 20vh;
-        width: 15vh;
+        width: 600px;
+        height: 315px;
         border-radius: 10px;
         padding-right: 5px;
         padding: 5px;
@@ -40,9 +40,10 @@
     display: flex;
     flex-direction: row;
     gap: 3px;
+    grid-area: 3 / 2;
     height: fit-content;
     .tags {
-        color: rgb(250, 250, 250);
+        color: rgba($color: #FFF, $alpha: 1);
         border-radius: 5px;
         padding-top: 2px;
         padding-bottom: 2px;

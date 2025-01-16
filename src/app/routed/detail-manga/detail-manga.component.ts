@@ -53,7 +53,7 @@ export class DetailMangaComponent {
     commentCount: 158,
     demographic: "",
     originalLanguage: "ja",
-    lastVolume: 24,
+    lastVolume: 0,
     lastChapter: 95,
     ratingBayesian: 9.605691153759626,
     availableTranslatedLanguages: []
