@@ -1,24 +1,27 @@
 import { Injectable, inject } from '@angular/core';
 import { CsvService } from './csv.service';
-import { Observable, elementAt, from, map } from 'rxjs';
+import { Observable, elementAt, from, map, forkJoin, of } from 'rxjs';
 import { Firestore, doc, getDoc, collection, query, setDoc, where, docSnapshots, deleteDoc, getDocs } from '@angular/fire/firestore';
-
-
+import { HttpClient } from '@angular/common/http';
+import axios from 'axios'; //muss installiert werden npm install axios 
+import { switchMap } from 'rxjs/operators';
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class MangaService {
-    db =  inject(Firestore);
+    private readonly BASE_URL = 'https://api.mangadex.org';
+    db = inject(Firestore);
+    private httpClient = inject(HttpClient);
 
     createManga_Db(manga: Manga_DB): Observable<void> {
-        const mangaReference = doc(this.db, "manga-data", );
+        const mangaReference = doc(this.db, "manga-data",);
         const promise = setDoc(mangaReference, manga);
 
         return from(promise);
     }
 
     getManga_DbById(manga_id: string): Observable<Manga_DB> {
-        const document = doc(this.db, "manga-data",manga_id);
+        const document = doc(this.db, "manga-data", manga_id);
         const promise = getDoc(document);
 
         return from(promise).pipe(
@@ -46,62 +49,219 @@ export class MangaService {
         )
     }
 
-    updateManga(manga: Manga_DB): Observable<void>  {
+    updateManga(manga: Manga_DB): Observable<void> {
         const mangaRef = doc(this.db, "manga-data", manga.manga_id);
-        const promise = setDoc(mangaRef, manga); 
+        const promise = setDoc(mangaRef, manga);
 
         return from(promise);
     }
 
     deleteManga(manga_id: string): Observable<void> {
-            const mangaRef = doc(this.db, "manga-data", manga_id);
-            const  promise = deleteDoc(mangaRef);
+        const mangaRef = doc(this.db, "manga-data", manga_id);
+        const promise = deleteDoc(mangaRef);
 
-            return from(promise)
+        return from(promise)
     };
 
-    //getManga_DexById(id: string): Observable<Manga_Dex>
+    // laden der mangadex api daten 
+    getManga_DexById(mangaId: string): Observable<Manga_Dex> {
+        return from(axios.get(`${this.BASE_URL}/manga/${mangaId}`)).pipe(
+            map(response => this.mapMangaData(response.data))
+        );
+    }
 
-    //getManga_DexByIds(id: string[]): Observable<Manga_Dex[]> 
+    // ein array aus mangaids gibt alle mangas mit den ids zurück
+    getManga_DexByIds(ids: string[]): Observable<Manga_Dex[]> {
+        const observables: Observable<Manga_Dex>[] = ids.map((item) => this.getManga_DexById(item));
+        return forkJoin(observables);
+    }
 
-    //getManga_DexByName(name: string): Observable<Manga_Dex> 
+    // laden der mangadex api daten zu allen gespeicherten ids in firestore
+    getAllManga_Dex(): Observable<Manga_Dex[]> {
+        return this.getManga_DbByIds().pipe(
+            switchMap((mangaDbArray) => {
+                const mangaIds = mangaDbArray.map(manga => manga.manga_id);
+                const mangaRequests = mangaIds.map((mangaId) => this.getManga_DexById(mangaId));
+                return forkJoin(mangaRequests);
+            })
+        );
+    }
 
-    //getManga_DexByNames(id: string[]): Observable<Manga_Dex[]> 
 
-    //getTopRatedManga_Dex(): Observable<Manga_Dex[]>
+    // Laden der 10 bestbewerteten Mangas in Mangadex und auch speichern dieser
+    getTopRatedManga_Dex(): Observable<Manga_Dex[]> {
+        const url = `${this.BASE_URL}/manga?order[rating]=desc&limit=10`;
 
-    //getLatestManga_Dex(): Observable<Manga_Dex[]>
+        return from(axios.get(url)).pipe(
+            switchMap(response => {
+                //API-Daten zu Manga_Dex
+                const topRatedMangas = response.data.data.map((manga: any) => this.mapMangaData(manga));
+                const mangaObservables: Observable<void>[] = topRatedMangas.map((manga: Manga_Dex) => this.createManga_Db({
+                    manga_id: manga.id,
+                    title: manga.defaultTitle,
+                    cover_url: manga.currentCover
+                }));
 
-    //getGermanManaga_Dex(): Observable<Manga_Dex[]>
+                return forkJoin(mangaObservables).pipe(
+                    map(() => topRatedMangas) // Hier geben wir die Liste der Manga_Dex zurück
+                );
+            })
+        );
+    }
 
-    //getEnglishManga_Dex(): Observable<Manga_Dex[]>
+    // Laden der 10 zuletzt hochgeladenen Mangas in Mangadex und auch speichern dieser
+    getLatestManga_Dex(): Observable<Manga_Dex[]> {
+        const url = `${this.BASE_URL}/manga?order[uploaded_at]=desc&limit=10`;
+
+        return from(axios.get(url)).pipe(
+            switchMap(response => {
+                //API-Daten zu Manga_Dex
+                const latestMangas = response.data.data.map((manga: any) => this.mapMangaData(manga));
+                const mangaObservables: Observable<void>[] = latestMangas.map((manga: Manga_Dex) => this.createManga_Db({
+                    manga_id: manga.id,
+                    title: manga.defaultTitle,
+                    cover_url: manga.currentCover
+                }));
+                return forkJoin(mangaObservables).pipe(
+                    map(() => latestMangas)
+                );
+            })
+        );
+    }
+    //alle mangas die eine deutsche übersetzung haben aus der firebase ziehen
+    getGermanManga_Dex(): Observable<Manga_Dex[]> {
+        return this.getManga_DbByIds().pipe(
+            switchMap(mangaDbArray => {
+                const mangaIds = mangaDbArray.map(manga => manga.manga_id);
+                 const mangaObservables: Observable<any>[] = mangaIds.map(mangaId => 
+                    this.checkGermanTranslationAvailable(mangaId,'de').pipe(
+                        switchMap(isGermanAvailable => {
+                            if (isGermanAvailable) {
+                                return this.getManga_DexById(mangaId);
+                            } else {
+                               return of(null);
+                            }
+                        })
+                    )
+                );
+                return forkJoin(mangaObservables).pipe(
+                    map(results => {
+                        // Filtern
+                        return results.filter(result => result !== null) as Manga_Dex[];
+                    })
+                );
+            })
+        );
+    }
+
+    //alle mangas die eine englische übersetzung haben aus der firebase ziehen
+    getEnglishManga_Dex(): Observable<Manga_Dex[]> {
+        return this.getManga_DbByIds().pipe(
+            switchMap(mangaDbArray => {
+                const mangaIds = mangaDbArray.map(manga => manga.manga_id);
+                 const mangaObservables: Observable<any>[] = mangaIds.map(mangaId => 
+                    this.checkGermanTranslationAvailable(mangaId,'en').pipe(
+                        switchMap(isGermanAvailable => {
+                            if (isGermanAvailable) {
+                                return this.getManga_DexById(mangaId);
+                            } else {
+                               return of(null);
+                            }
+                        })
+                    )
+                );
+                return forkJoin(mangaObservables).pipe(
+                    map(results => {
+                        // Filtern
+                        return results.filter(result => result !== null) as Manga_Dex[];
+                    })
+                );
+            })
+        );
+    }
+    //help functions
+
+    //api daten zu mangadex daten (interface)
+    private mapMangaData(apiData: any): Manga_Dex {
+        const attributes = apiData.data.attributes;
+        const relationships = apiData.data.relationships;
+
+        const coverFileName = relationships.find(
+            (rel: any) => rel.type === 'cover_art'
+        )?.attributes?.fileName;
+        const coverUrl = coverFileName
+            ? `https://uploads.mangadex.org/covers/${apiData.data.id}/${coverFileName}`
+            : '';
+        const availableTranslatedLanguages = attributes.availableTranslatedLanguages || [];
+        return {
+            id: apiData.data.id,
+            defaultTitle: attributes.title.en || '',
+            germanTitle: attributes.title.de ? [attributes.title.de] : [],
+            originalTitle: attributes.title.jp ? [attributes.title.jp] : [],
+            currentCover: coverUrl,
+            description: attributes.description.en || '',
+            contentRating: attributes.contentRating || '',
+            tags: attributes.tags.map((tag: any) => tag.attributes.name.en || ''),
+            ratingAverage: attributes.rating ? attributes.rating.average : 0,
+            releaseDate: attributes.year || '',
+            authors: relationships
+                .filter((rel: any) => rel.type === 'author')
+                .map((author: any) => author.attributes.name),
+            artists: relationships
+                .filter((rel: any) => rel.type === 'artist')
+                .map((artist: any) => artist.attributes.name),
+            publicationStatus: attributes.status || '',
+            followers: attributes.followers || 0,
+            commentCount: attributes.comments || 0,
+            demographic: attributes.publicationDemographic || '',
+            originalLanguage: attributes.originalLanguage || '',
+            lastVolume: parseInt(attributes.lastVolume, 10) || 0,
+            lastChapter: parseInt(attributes.lastChapter, 10) || 0,
+            ratingBayesian: attributes.rating ? attributes.rating.bayesian : 0,
+            availableTranslatedLanguages: availableTranslatedLanguages,
+
+        };
+    }
+    //verfügbare Sprache prüfen
+    private checkGermanTranslationAvailable(mangaId: string, language: string): Observable<boolean> {
+        return this.getManga_DexById(mangaId).pipe(
+            map((manga: Manga_Dex) => {
+
+                return manga.availableTranslatedLanguages.includes(language);
+            })
+        );
+    }
+
+
 }
+
+
 
 export interface Manga_DB {
     manga_id: string;
     title: string;
     cover_url: string;
 };
-
 export interface Manga_Dex {
-    id: string; //0 .
-    defaultTitle: string; //1 .
-    germanTitle: string[]; //2
-    originalTitle: string[]; //3
-    currentCover: string; //4 .
-    description: string; //5 .
-    contentRating: string; //6
-    tags: string[]; //7
-    ratingAverage: number; //8 .
-    releaseDate: string; //9
-    authors: string[]; //10
-    artists: string[]; //11
-    publicationStatus: string; //12
-    followers: number; //13
-    commentCount: number; //14
-    demographic: string; //15
-    originalLanguage: string; //16 .
-    lastVolume: number; //17
-    lastChapter: number; //18
-    ratingBayesian: number; //20
+    id: string;
+    defaultTitle: string;
+    germanTitle: string[];
+    originalTitle: string[];
+    currentCover: string;
+    description: string;
+    contentRating: string;
+    tags: string[];
+    ratingAverage: number;
+    releaseDate: string;
+    authors: string[];
+    artists: string[];
+    publicationStatus: string;
+    followers: number;
+    commentCount: number;
+    demographic: string;
+    originalLanguage: string;
+    lastVolume: number;
+    lastChapter: number;
+    ratingBayesian: number;
+    availableTranslatedLanguages: string[];
 };
