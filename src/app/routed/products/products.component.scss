@@ -16,9 +16,25 @@
     margin-bottom: 1vh;
 }
 
-.mangaOutput {
+.list {
     display: flex;
     flex-direction: column;
     width: 35vw;
     min-width: 800px;
 }
+
+.table {
+    display: flex;
+    flex-wrap: wrap;
+    width: 35vw;
+    min-width: 800px;
+}
+
+.image {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 35vw;
+    min-width: 800px;
+}
+

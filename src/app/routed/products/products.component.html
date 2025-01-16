@@ -15,15 +15,12 @@
             <button value="list" (click)="apply('list')">
                 <img src="./svgs/lines.svg" alt="Liste">
             </button>
-            <button value="table" (click)="apply('table')">
-                <img src="./svgs/bigboxes.svg" alt="Liste">
-            </button>
             <button value="image" (click)="apply('image')">
-                <img src="./svgs/boxes.svg" alt="Liste">
+                <img src="./svgs/bigboxes.svg" alt="Liste">
             </button>
         </div>
     </div>
-    <div class="mangaOutput">
+    <div [ngClass]="selectedStyle">
         <app-manga-box *ngFor="let manga of mangas" [manga]="manga" [selectedStyle]="selectedStyle"></app-manga-box>
         <app-manga-box [selectedStyle]="selectedStyle"></app-manga-box>
         <app-manga-box [selectedStyle]="selectedStyle"></app-manga-box>
