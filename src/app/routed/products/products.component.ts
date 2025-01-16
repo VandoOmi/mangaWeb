@@ -20,7 +20,7 @@ export class ProductsComponent {
   constructor() {}
 
   ngOnInit(): void {
-    this.mangaServ.getTopRatedManga_Dex().subscribe({
+    this.mangaServ.getLatestManga_Dex().subscribe({
       next: mangaList => {
         this.mangas = mangaList;
       },

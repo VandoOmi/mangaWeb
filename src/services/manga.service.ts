@@ -3,7 +3,7 @@ import { Observable, from, map, forkJoin, of } from 'rxjs';
 import { Firestore, doc, getDoc, collection, setDoc, deleteDoc, getDocs } from '@angular/fire/firestore';
 import { HttpClient } from '@angular/common/http';
 import axios from 'axios'; //muss installiert werden npm install axios 
-import { switchMap } from 'rxjs/operators';
+import { mergeMap, switchMap, tap } from 'rxjs/operators';
 import { limit } from 'firebase/firestore';
 @Injectable({
     providedIn: 'root'
@@ -124,25 +124,21 @@ export class MangaService {
         });
     
         return from(tempM).pipe(
-            switchMap(async response => {
-                
-                const latestMangas = await Promise.all(
-                    response.data.data.map((manga: any) => this.mapMangaData(manga))
-                );
-    
-                
-                const mangaObservables: Observable<void>[] = latestMangas.map((manga: Manga_Dex) =>
+            mergeMap(response => 
+                from(
+                    Promise.all(
+                        response.data.data.map((manga: any) => this.mapMangaData(manga))
+                    )
+                )
+            ),
+            tap(latestMangas => {
+                latestMangas.forEach((manga: Manga_Dex) => {
                     this.createManga_Db({
                         manga_id: manga.id,
                         title: manga.defaultTitle,
                         cover_url: manga.currentCover
-                    })
-                );
-    
-                
-                await forkJoin(mangaObservables).toPromise();
-    
-                return latestMangas;
+                    }).subscribe();
+                });
             })
         );
     }
@@ -216,10 +212,7 @@ export class MangaService {
         const coverFileName = relationships.find(
             (rel: any) => rel.type === 'cover_art'
         )?.attributes?.fileName;
-        const coverUrl = coverFileName
-            ? `https://uploads.mangadex.org/covers/${apiData.id}/${coverFileName}`
-            : '';
-        const availableTranslatedLanguages = attributes.availableTranslatedLanguages || [];
+        const coverUrl = coverFileName ? `https://uploads.mangadex.org/covers/${apiData.id}/${coverFileName}` : '';
     
         const tempR = await axios({
             method: 'GET',
@@ -227,7 +220,7 @@ export class MangaService {
         });
     
         const statistics = tempR?.data?.statistics?.[apiData.id] || {};
-        return {
+        const manga = {
             id: apiData.id,
             defaultTitle: attributes.title.en || '',
             germanTitle: attributes.title.de ? [attributes.title.de] : [],
@@ -240,10 +233,10 @@ export class MangaService {
             releaseDate: attributes.year || '',
             authors: relationships
                 .filter((rel: any) => rel.type === 'author')
-                .map((author: any) => author.attributes.name),
+                .map((author: any) => author.attributes?.name ?? ''),
             artists: relationships
                 .filter((rel: any) => rel.type === 'artist')
-                .map((artist: any) => artist.attributes.name),
+                .map((artist: any) => artist.attributes?.name ?? ''),
             publicationStatus: attributes.status || '',
             followers: statistics.followers || 0,
             commentCount: statistics.comments?.repliesCount || 0,
@@ -252,8 +245,10 @@ export class MangaService {
             lastVolume: parseInt(attributes.lastVolume, 10) || 0,
             lastChapter: parseInt(attributes.lastChapter, 10) || 0,
             ratingBayesian: statistics.rating?.bayesian || 0,
-            availableTranslatedLanguages: availableTranslatedLanguages,
+            availableTranslatedLanguages: attributes.availableTranslatedLanguages || [],
         };
+
+        return manga;
     }
     
     //verfügbare Sprache prüfen
