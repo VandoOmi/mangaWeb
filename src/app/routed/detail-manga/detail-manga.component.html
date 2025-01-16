@@ -28,6 +28,9 @@
                 @if (this.manga.publicationStatus == "completed") {
                     🔵 Publication: {{this.manga.releaseDate}} {{(this.manga.publicationStatus.charAt(0).toUpperCase() + this.manga.publicationStatus.slice(1))}}
                 }
+                @if (this.manga.publicationStatus == "") {
+                    Publication: {{this.manga.releaseDate}}
+                }
             </p>
             @if (this.manga.lastVolume != 0) {
                 <p class="tags tag">Volumes: {{this.manga.lastVolume}}</p>
