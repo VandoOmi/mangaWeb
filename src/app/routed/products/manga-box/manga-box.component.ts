@@ -1,5 +1,5 @@
 import { Component, Input, NgModule } from '@angular/core';
-import { Manga } from '../../../../services/manga.service';
+import { Manga_Dex } from '../../../../services/manga.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./manga-box.component.scss']
 })
 export class MangaBoxComponent {
-  @Input() manga!: Manga;
+  @Input() manga!: Manga_Dex;
   @Input() selectedStyle: string = 'list';
 }
 

@@ -1,6 +1,6 @@
 import { Component, Injectable, Input } from '@angular/core';
-import { Manga } from '../../../services/manga.service';
-import { NgFor, NgIf } from '@angular/common';
+import { Manga_Dex } from '../../../services/manga.service';
+import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-detail-manga',
@@ -10,6 +10,5 @@ import { NgFor, NgIf } from '@angular/common';
   styleUrl: './detail-manga.component.scss'
 })
 export class DetailMangaComponent {
-  @Input() manga!: Manga;
-  demographics!: ["shounen", "shoujo", "josei", "seinen"];
+  @Input() manga!: Manga_Dex;
 }

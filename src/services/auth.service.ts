@@ -1,11 +1,13 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User } from '@angular/fire/auth';
 import { collectionData, doc, Firestore, addDoc, collection, deleteDoc, setDoc, getDoc, getDocs } from '@angular/fire/firestore';
+import { updateProfile } from '@firebase/auth';
 import { BehaviorSubject, Observable, catchError, from, map, mapTo, throwError} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthService {
   firebaseAuth = inject(Auth);
   firestore = inject(Firestore);
@@ -30,9 +32,8 @@ export class AuthService {
     );
   }
 
-
   getUserRole(uid: string) : Observable<UserRoleInterface> {
-    const docRef = doc(this.firestore, 'user-role/'+ uid);
+    const docRef = doc(this.firestore, 'user-role/', uid);
     const promise = getDoc(docRef);
 
     return from(promise).pipe(
@@ -51,9 +52,9 @@ export class AuthService {
     );
   }
 
-  addUserRole(uid: string, role: string): Observable<void> {
-    const userRoleToCreate = {uid,role};
-    const docRef = doc(this.firestore, 'user-role', uid);
+  addUserRole(user: User, role: string): Observable<void> {
+    const userRoleToCreate = {email:(user.email),role: role};
+    const docRef = doc(this.firestore, 'user-role', user.uid);
     const promise = setDoc(docRef, userRoleToCreate);
 
     return from(promise).pipe(
@@ -71,7 +72,7 @@ export class AuthService {
     return from(promise);
   }
 
-  removeAdminRole(user: UserRoleInterface): Observable<void> {7
+  removeAdminRole(user: UserRoleInterface): Observable<void> {
     user.role = 'user';
     return this.updateUserRole(user);
   }
@@ -91,8 +92,9 @@ export class AuthService {
       password
     ).then(
       (response) => {
-        this.addUserRole(response.user.uid!, 'user');
+        this.addUserRole(response.user, 'user');
         this.currentUser.next(response.user);
+        return updateProfile(response.user, {displayName: username});
       }
     );
 
@@ -106,8 +108,9 @@ export class AuthService {
       password
     ).then(
       (response) => {
-        this.addUserRole(response.user.uid!, 'admin');
+        this.addUserRole(response.user, 'admin');
         this.currentUser.next(response.user);
+        return updateProfile(response.user, {displayName: username});
       }
     );
 
@@ -150,6 +153,6 @@ export interface UserInterface {
 
 export interface UserRoleInterface {
   uid: string,
-  email: string
+  email: string,
   role: string
 }
