@@ -1,15 +1,12 @@
 <div class="container">
     <h1>Our mangas:</h1>
     <div class="filter">
-        <select name="Sort by" id="sortMangas">
-            <option value="ascTitle">Title Ascending</option>
-            <option value="descTitle">Title Descending</option>
-            <option value="highRating">Highest Rating</option>
-            <option value="lowRating">Lowest Rating</option>
-            <option value="mostFollows">Most Follows</option>
-            <option value="fewFollow">Fewest Follows</option>
-            <option value="ascYear">Year Ascending</option>
-            <option value="descYear">Year Descending</option>
+        <select name="Sort by" id="sortMangas" (change)="filterManga($event)">
+            <option value="latest">Zuletzt Veröffentlicht</option>
+            <option value="best">Am besten Bewertet</option>
+            <option value="eng">Nur Englische</option>
+            <option value="ger">Nur Deutsche</option>
+            <option value="all">Alle</option>
         </select>
         <div class="buttons">
             <button value="list" (click)="apply('list')">

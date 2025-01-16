@@ -16,11 +16,12 @@ export class ProductsComponent {
   mangaServ = inject(MangaService);
   mangas: Manga_Dex[] = [];
   selectedStyle: string = 'list';
+  mangaCount = 30
 
   constructor() {}
 
   ngOnInit(): void {
-    this.mangaServ.getTopRatedManga_Dex(10).subscribe({
+    this.mangaServ.getTopRatedManga_Dex(this.mangaCount).subscribe({
       next: mangaList => {
         this.mangas = mangaList;
       },
@@ -37,5 +38,66 @@ export class ProductsComponent {
   
   openDetail() {
     this.router.navigateByUrl('detailManga');
+  }
+
+  filterManga(event: any) {
+    const search = event.target.value;
+    switch (search) {
+      case 'all':
+        this.mangaServ.getAllManga_Dex(this.mangaCount).subscribe({
+          next: mangaList => {
+            this.mangas = mangaList;
+          },
+          error: error => {
+            console.error(error);
+            throw new Error('Cant find Mangas');
+          }
+        })
+        break;
+      case 'best':
+        this.mangaServ.getTopRatedManga_Dex(this.mangaCount).subscribe({
+          next: mangaList => {
+            this.mangas = mangaList;
+          },
+          error: error => {
+            console.error(error);
+            throw new Error('Cant find Mangas');
+          }
+        })
+        break;
+      case 'latest':
+        this.mangaServ.getLatestManga_Dex(this.mangaCount).subscribe({
+          next: mangaList => {
+            this.mangas = mangaList;
+          },
+          error: error => {
+            console.error(error);
+            throw new Error('Cant find Mangas');
+          }
+        })
+        break;
+        case 'eng':
+          this.mangaServ.getEnglishManga_Dex(this.mangaCount).subscribe({
+            next: mangaList => {
+              this.mangas = mangaList;
+            },
+            error: error => {
+              console.error(error);
+              throw new Error('Cant find Mangas');
+            }
+          })
+        break;
+        case 'ger':
+          this.mangaServ.getGermanManga_Dex(this.mangaCount).subscribe({
+            next: mangaList => {
+              this.mangas = mangaList;
+            },
+            error: error => {
+              console.error(error);
+              throw new Error('Cant find Mangas');
+            }
+          })
+        break;
+    }
   }
 }
