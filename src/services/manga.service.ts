@@ -212,7 +212,9 @@ export class MangaService {
         const attributes = apiData.attributes;
         const relationships = apiData.relationships;
     
-   
+        console.log('Attributes:', attributes);
+        console.log('Relationships:', relationships);
+    
         const coverFileName = relationships.find(
             (rel: any) => rel.type === 'cover_art'
         )?.attributes?.fileName;
@@ -231,7 +233,8 @@ export class MangaService {
                 return status === 400 || (status >= 200 && status < 300);
             }
         });
-
+    
+        console.log('Statistics Response:', tempR.data);
     
         const statistics = tempR?.data?.statistics?.[apiData.id] || {};
         return {
