@@ -1,18 +1,25 @@
 <div class="header">
     <div class="left">
+      <div class="homeSize">
         <a [routerLink]="'/home'">
             <img class="logo" src="favicon.ico" alt="Logo">
         </a>
-        <select name="Über Uns" id="aboutUsDropdown" (change)="navigateTo($event)">
-            <option value="">Wer sind Wir?</option>
-            <option value="/team">Team</option>
-        </select>
+      </div>
+      <div class="werSindWirSize">
+        <a class="werSindWir" routerLink="/team">
+          Wer wir sind ?
+      </a>
+    </div>
+    <div class="mangaSize">
         <a class="manga" routerLink="/products">
             Mangas
         </a>
+      </div>
+      <div class="adminSize">
         <a class="admin" routerLink="/admin">
             Administation
         </a>
+      </div>
     </div>
     <div class="right">
       @if (this.user != null) {

@@ -24,4 +24,21 @@ a:active{
 }
 a:hover{
     font-size: 17px;
+    color: rgba($color: #000000, $alpha: 0.6);
+}
+
+.impressumSize{
+    display: flex;
+    justify-content: center;
+    width: 33%;
+}
+.datenschutzSize{
+    display: flex;
+    justify-content: center;
+    width: 33%;
+}
+.copyrightSize{
+    display: flex;
+    justify-content: center;
+    width: 33%;
 }
