@@ -18,9 +18,6 @@
         </div>
     </div>
     <div [ngClass]="selectedStyle">
-        <a routerLink="/detailManga" >
             <app-manga-box *ngFor="let manga of mangas" [manga]="manga" [selectedStyle]="selectedStyle"></app-manga-box>
-        </a>
-
     </div>
 </div>
