@@ -1,11 +1,13 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User } from '@angular/fire/auth';
 import { collectionData, doc, Firestore, addDoc, collection, deleteDoc, setDoc, getDoc, getDocs } from '@angular/fire/firestore';
+import { updateProfile } from '@firebase/auth';
 import { BehaviorSubject, Observable, catchError, from, map, mapTo, throwError} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthService {
   firebaseAuth = inject(Auth);
   firestore = inject(Firestore);
@@ -30,9 +32,8 @@ export class AuthService {
     );
   }
 
-
   getUserRole(uid: string) : Observable<UserRoleInterface> {
-    const docRef = doc(this.firestore, 'user-role/'+ uid);
+    const docRef = doc(this.firestore, 'user-role/', uid);
     const promise = getDoc(docRef);
 
     return from(promise).pipe(
@@ -51,29 +52,9 @@ export class AuthService {
     );
   }
 
-  getCurrentUserRole() : Observable<UserRoleInterface> {
-    const docRef = doc(this.firestore, 'user-role/'+ this.firebaseAuth.currentUser?.uid);
-    const promise = getDoc(docRef);
-
-    return from(promise).pipe(
-      map((docSnapshot) => {
-        if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
-          return {
-            uid: docSnapshot.id,
-            email: data?.['email'] ?? '',
-            role: data?.['role'] ?? ''
-          } as UserRoleInterface;
-        } else {
-          throw new Error('Document does not exist');
-        }
-      })
-    );
-  }
-
-  addUserRole(uid: string, email: string, role: string): Observable<void> {
-    const userRoleToCreate = {email, role};
-    const docRef = doc(this.firestore, 'user-role', uid);
+  addUserRole(user: User, role: string): Observable<void> {
+    const userRoleToCreate = {email:(user.email),role: role};
+    const docRef = doc(this.firestore, 'user-role', user.uid);
     const promise = setDoc(docRef, userRoleToCreate);
 
     return from(promise).pipe(
@@ -84,16 +65,22 @@ export class AuthService {
     );;
   }
 
-  removeUserRole(id: string) : Observable<void> {
-    const docRef = doc(this.firestore, 'user-role/'+ id);
+  removeRole(uid: string) : Observable<void> {
+    const docRef = doc(this.firestore, 'user-role/'+ uid);
     const promise = deleteDoc(docRef);
 
     return from(promise);
   }
 
-  updateUserRole(id: string, dataToUpdate: UserRoleInterface) : Observable<void> {
-    const docRef = doc(this.firestore, 'user-role/'+ id);
-    const promise = setDoc(docRef,dataToUpdate);
+  removeAdminRole(user: UserRoleInterface): Observable<void> {
+    user.role = 'user';
+    return this.updateUserRole(user);
+  }
+
+  updateUserRole(user: UserRoleInterface) : Observable<void> {
+    const data = {email: (user.email),role: (user.role)};
+    const docRef = doc(this.firestore, 'user-role/'+ user.uid);
+    const promise = setDoc(docRef,data);
 
     return from(promise);
   }
@@ -105,8 +92,9 @@ export class AuthService {
       password
     ).then(
       (response) => {
-        this.addUserRole(response.user.uid!, response.user.email!, 'user');
+        this.addUserRole(response.user, 'user');
         this.currentUser.next(response.user);
+        return updateProfile(response.user, {displayName: username});
       }
     );
 
@@ -120,8 +108,9 @@ export class AuthService {
       password
     ).then(
       (response) => {
-        this.addUserRole(response.user.uid!, response.user.email!, 'admin');
+        this.addUserRole(response.user, 'admin');
         this.currentUser.next(response.user);
+        return updateProfile(response.user, {displayName: username});
       }
     );
 
@@ -164,6 +153,6 @@ export interface UserInterface {
 
 export interface UserRoleInterface {
   uid: string,
-  email: string
+  email: string,
   role: string
 }

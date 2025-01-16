@@ -1,6 +1,12 @@
-.container{
+.page {
     display: flex;
-    flex-direction: column;
-    height: 100rem;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 80vh;
+    margin-top: 0;
+    padding: 3vh;
+    
+    background-color: rgba(0, 0, 0, 0.01);
+
 }

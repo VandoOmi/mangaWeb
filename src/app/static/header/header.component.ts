@@ -15,18 +15,26 @@ export class HeaderComponent {
   authServ = inject(AuthService);
   router = inject(Router)
   user: User | null = null;
+  isCurrentUserAdmin: boolean = false;
+  displayname: string = 'zurück';
 
   constructor() {}
 
   ngOnInit(): void {
-    this.authServ.currentUser$.subscribe( user => {
+    this.authServ.currentUser$.subscribe(user => {
       this.user = user;
-    })
+      if (this.user) {
+          this.displayname = this.user.displayName || this.user.email || 'zurück';
+          this.authServ.getUserRole(this.user.uid).subscribe(userRole => {
+              this.isCurrentUserAdmin = userRole.role === 'admin';
+          });
+      }
+    });
   }
 
-  navigateTo(e: Event) {
-    var selectValue = e.target as HTMLSelectElement;
-    var route = selectValue.value;
-    if (route) this.router.navigate([route]);
+  logout() {
+    this.authServ.logout();
+    this.isCurrentUserAdmin = false;
+    this.router.navigateByUrl('/home');
   }
 }

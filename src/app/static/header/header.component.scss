@@ -2,8 +2,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 4rem;
-    box-shadow: 2px 2px 2px rgba(0,0,0,0.1);
+
+    height: 9vh;
+
+    background-color: white;
+    box-shadow: 2px 2px 2px 2px rgba(0,0,0,0.1);
 
     &>* {
         display: flex;
@@ -67,29 +70,6 @@
         &:hover {
             font-size: 1.52rem;
             font-weight: bold;
-        }
-    }
-
-    select {
-        -moz-appearance: none;
-        -webkit-appearance: none;
-        appearance: none;
-        border: none;
-        background-color: transparent;
-        color: rgba(61,58,109,255);
-        font-family: glitch;
-        font-size: 1.5rem;
-        font-weight: 140%;
-
-        &:hover {
-            font-size: 1.52rem;
-        }
-
-        option {
-            color: rgba(61,58,109,255);
-            font-family: glitch;
-            font-size: 1.3rem;
-            font-weight: 140%;
         }
     }
 }

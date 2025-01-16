@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "ES2022",
+        "outDir": "./",
+        "noImplicitAny": true,
+        "strictNullChecks": true
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "node_moduls"
+    ]
+}
