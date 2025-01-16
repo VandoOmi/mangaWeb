@@ -3,7 +3,6 @@ import { Manga_Dex, MangaService } from '../../../services/manga.service';
 import { NgClass, NgFor } from '@angular/common';
 import { Router } from '@angular/router';
 import { MangaBoxComponent } from "./manga-box/manga-box.component";
-import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-products',
@@ -21,7 +20,7 @@ export class ProductsComponent {
   constructor() {}
 
   ngOnInit(): void {
-    this.mangaServ.getLatestManga_Dex().subscribe({
+    this.mangaServ.getTopRatedManga_Dex().subscribe({
       next: mangaList => {
         this.mangas = mangaList;
       },

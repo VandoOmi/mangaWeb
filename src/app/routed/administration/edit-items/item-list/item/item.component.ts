@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
-import { Manga } from '../../../../../../services/manga.service';
+import { Component, Input, inject } from '@angular/core';
+import { MangaService, Manga_DB } from '../../../../../../services/manga.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -9,7 +10,17 @@ import { Manga } from '../../../../../../services/manga.service';
   templateUrl: './item.component.html',
   styleUrl: './item.component.scss'
 })
-export class ItemComponent {
-  @Input() item?:Manga;
 
+export class ItemComponent {
+  mangaServ = inject(MangaService)
+  router = inject(Router);
+  @Input() item!:Manga_DB;
+
+  edit(): void {
+    this.router.navigateByUrl('/editItem');
+  }
+
+  delete():void {
+    this.mangaServ.deleteManga(this.item.manga_id).subscribe();
+  }
 }

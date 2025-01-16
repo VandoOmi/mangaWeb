@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ItemComponent } from "./item/item.component";
 import { NgForOf } from '@angular/common';
-import { Manga, MangaService } from '../../../../../services/manga.service';
+import { MangaService, Manga_DB } from '../../../../../services/manga.service';
 
 @Component({
   selector: 'app-item-list',
@@ -12,11 +12,20 @@ import { Manga, MangaService } from '../../../../../services/manga.service';
 })
 export class ItemListComponent {
   private mangaServ: MangaService = inject(MangaService);
-  mangaList: Manga[] = [];
+  mangaList: Manga_DB[] = [];
   
   constructor() {}
 
   ngOnInit(): void {
-    this.mangaList = this.mangaServ.getMangaList();
+    this.mangaServ.getManga_DbByIds().subscribe({
+      next: mangas => {
+        this.mangaList = mangas;
+      },
+      error: error => {
+        console.error(error);
+        throw new Error('Manga_DB not Found');
+      
+      }
+    });
   }
 }

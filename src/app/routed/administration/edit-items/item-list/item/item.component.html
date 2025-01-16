@@ -1,7 +1,8 @@
 <div class="container">
     <div>
-        <h3 class="Id">{{item?.id}}</h3>
-        <h3 class="Titel">{{item?.title_de}}</h3>
+        <h3 class="Id">{{item.manga_id}}</h3>
+        <h3 class="Titel">{{item.title}}</h3>
     </div>
-    <button>Bearbeiten</button>
+    <button (click)="edit()">Bearbeiten</button>
+    <button (click)="delete()">Löschen</button>
 </div>
