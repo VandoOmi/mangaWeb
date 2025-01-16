@@ -306,12 +306,13 @@ export class MangaService {
 }
 
 
-
+// interface für Firebase 
 export interface Manga_DB {
     manga_id: string;
     title: string;
     cover_url: string;
 };
+// interface für Mangadex api
 export interface Manga_Dex {
     id: string;
     defaultTitle: string;
