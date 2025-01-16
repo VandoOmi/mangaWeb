@@ -2,7 +2,9 @@
 <div class="name">
     <img class="lang" src="/img/{{this.manga.originalLanguage}}.svg" alt="language icon">
     <div>{{this.manga.defaultTitle}}</div>
-    <div *ngFor="let title of this.manga.germanTitle">{{title}}</div>
+    @if (this.manga.germanTitle.length > 0) {
+        <div *ngFor="let title of this.manga.germanTitle">{{title}}</div>
+    }
     <div *ngFor="let title of this.manga.originalTitle">{{title}}</div>
 </div>
 <div class="stats">
@@ -12,20 +14,23 @@
     <div class="{{this.manga.publicationStatus}}">{{(this.manga.publicationStatus.charAt(0).toUpperCase() + this.manga.publicationStatus.slice(1))}}</div>
 </div>
 <div class="artist">
-    <div class="tag tags" *ngFor="let artist of this.manga.artists">{{artist}}</div>
-    <br>
-    <div class="tag tags" *ngFor="let author of this.manga.authors">{{author}}</div>
+    @if (this.manga.artists.length > 0) {
+        <div class="tag tags" *ngFor="let artist of this.manga.artists">{{artist}}</div>
+        <br>
+    }
+    @if (this.manga.authors.length > 0) {
+        <div class="tag tags" *ngFor="let author of this.manga.authors">{{author}}</div>
+    }
 </div>
 <div id="tags">
     <div class="tags {{this.manga.contentRating}}" >{{(this.manga.contentRating.charAt(0).toUpperCase() + this.manga.contentRating.slice(1))}}</div>
-    <div class="tags tag">{{this.manga.demographic}}</div>
     <br>
     <div class="tags tag" *ngFor="let tag of this.manga.tags">{{tag}}</div>
 </div>
 <div id="tags">
     <div class="tags tag">{{this.manga.lastVolume}} {{this.manga.lastChapter}}</div>
     <div class="tags tag">{{this.manga.releaseDate}}</div>
-    <div class="tags tag">{{(this.manga.demographic.charAt(0).toUpperCase() + this.manga.demographic.slice(1))}}</div>
+    <div *ngIf="['shounen', 'shoujo', 'josei', 'seinen'].includes(this.manga.demographic)" class="tags tag">{{(this.manga.demographic.charAt(0).toUpperCase() + this.manga.demographic.slice(1))}}</div>
 </div>
 <div class="description">{{this.manga.description}}</div>
 <a href="http://mangadex.org/title/{{this.manga.id}}">Read on MangaDex</a>
