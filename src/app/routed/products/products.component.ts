@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
-import { MangaBoxComponent, MangaBoxModule } from "./manga-box/manga-box.component";
 import { Manga_Dex, MangaService } from '../../../services/manga.service';
 import { NgFor } from '@angular/common';
 import { Router } from '@angular/router';
+import { MangaBoxComponent } from "./manga-box/manga-box.component";
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [NgFor, MangaBoxModule],
+  imports: [NgFor, MangaBoxComponent],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss'
 })

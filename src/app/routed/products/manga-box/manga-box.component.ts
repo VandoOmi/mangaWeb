@@ -1,11 +1,11 @@
 import { Component, Input, NgModule } from '@angular/core';
 import { Manga_Dex } from '../../../../services/manga.service';
-import { NgFor } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-manga-box',
   standalone: true,
-  imports: [NgFor],
+  imports: [NgClass],
   templateUrl: './manga-box.component.html',
   styleUrls: ['./manga-box.component.scss']
 })

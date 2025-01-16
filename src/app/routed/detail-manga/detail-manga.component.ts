@@ -5,7 +5,7 @@ import { NgFor } from '@angular/common';
 @Component({
   selector: 'app-detail-manga',
   standalone: true,
-  imports: [NgFor, NgIf],
+  imports: [NgFor],
   templateUrl: './detail-manga.component.html',
   styleUrl: './detail-manga.component.scss'
 })
