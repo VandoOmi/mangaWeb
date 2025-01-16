@@ -14,11 +14,15 @@ export class MangaService {
     private httpClient = inject(HttpClient);
 
     createManga_Db(manga: Manga_DB): Observable<void> {
-        const mangaReference = doc(this.db, "manga-data",);
+        if (!manga.manga_id) {
+            throw new Error('Manga ID ist erforderlich, um ein Dokument zu erstellen.');
+        }
+        const mangaReference = doc(this.db, "manga-data", manga.manga_id); 
         const promise = setDoc(mangaReference, manga);
-
+    
         return from(promise);
     }
+    
 
     getManga_DbById(manga_id: string): Observable<Manga_DB> {
         const document = doc(this.db, "manga-data", manga_id);
@@ -109,44 +113,52 @@ export class MangaService {
 
     // Laden der 10 zuletzt hochgeladenen Mangas in Mangadex und auch speichern dieser
     getLatestManga_Dex(): Observable<Manga_Dex[]> {
-        const tempM =  axios({
+        const tempM = axios({
             method: 'get',
             url: 'https://api.mangadex.org/manga',
-            params:{
+            params: {
                 limit: 10,
-                order: {latestUploadedChapter: 'desc'},
+                order: { latestUploadedChapter: 'desc' },
                 includes: ["cover_art", "author", "artist", "tag"]
             }
-        })
-        
-
+        });
+    
         return from(tempM).pipe(
-            switchMap(response => {
-                //API-Daten zu Manga_Dex
-                const latestMangas = response.data.data.map((manga: Manga_Dex) => this.mapMangaData(manga));
-                const mangaObservables: Observable<void>[] = latestMangas.map((manga: Manga_Dex) => this.createManga_Db({
-                    manga_id: manga.id,
-                    title: manga.defaultTitle,
-                    cover_url: manga.currentCover
-                }));
-                return forkJoin(mangaObservables).pipe(
-                    map(() => latestMangas)
+            switchMap(async response => {
+                
+                const latestMangas = await Promise.all(
+                    response.data.data.map((manga: any) => this.mapMangaData(manga))
                 );
+    
+                
+                const mangaObservables: Observable<void>[] = latestMangas.map((manga: Manga_Dex) =>
+                    this.createManga_Db({
+                        manga_id: manga.id,
+                        title: manga.defaultTitle,
+                        cover_url: manga.currentCover
+                    })
+                );
+    
+                
+                await forkJoin(mangaObservables).toPromise();
+    
+                return latestMangas;
             })
         );
     }
+    
     //alle mangas die eine deutsche übersetzung haben aus der firebase ziehen
     getGermanManga_Dex(): Observable<Manga_Dex[]> {
         return this.getManga_DbByIds().pipe(
             switchMap(mangaDbArray => {
                 const mangaIds = mangaDbArray.map(manga => manga.manga_id);
-                 const mangaObservables: Observable<any>[] = mangaIds.map(mangaId => 
-                    this.checkGermanTranslationAvailable(mangaId,'de').pipe(
+                const mangaObservables: Observable<any>[] = mangaIds.map(mangaId =>
+                    this.checkGermanTranslationAvailable(mangaId, 'de').pipe(
                         switchMap(isGermanAvailable => {
                             if (isGermanAvailable) {
                                 return this.getManga_DexById(mangaId);
                             } else {
-                               return of(null);
+                                return of(null);
                             }
                         })
                     )
@@ -166,13 +178,13 @@ export class MangaService {
         return this.getManga_DbByIds().pipe(
             switchMap(mangaDbArray => {
                 const mangaIds = mangaDbArray.map(manga => manga.manga_id);
-                 const mangaObservables: Observable<any>[] = mangaIds.map(mangaId => 
-                    this.checkGermanTranslationAvailable(mangaId,'en').pipe(
+                const mangaObservables: Observable<any>[] = mangaIds.map(mangaId =>
+                    this.checkGermanTranslationAvailable(mangaId, 'en').pipe(
                         switchMap(isGermanAvailable => {
                             if (isGermanAvailable) {
                                 return this.getManga_DexById(mangaId);
                             } else {
-                               return of(null);
+                                return of(null);
                             }
                         })
                     )
@@ -190,9 +202,17 @@ export class MangaService {
 
     //api daten zu mangadex daten (interface)
     private async mapMangaData(apiData: any): Promise<Manga_Dex> {
+        if (!apiData.id) {
+            throw new Error('Ungültige Manga-ID von der API erhalten.');
+        }
+        if (!apiData || !apiData.attributes || !apiData.relationships) {
+            throw new Error('Unerwartetes API-Datenformat');
+        }
+    
         const attributes = apiData.attributes;
         const relationships = apiData.relationships;
-
+    
+   
         const coverFileName = relationships.find(
             (rel: any) => rel.type === 'cover_art'
         )?.attributes?.fileName;
@@ -200,36 +220,22 @@ export class MangaService {
             ? `https://uploads.mangadex.org/covers/${apiData.id}/${coverFileName}`
             : '';
         const availableTranslatedLanguages = attributes.availableTranslatedLanguages || [];
-        const tempR = axios({
+    
+        const tempR = await axios({
             method: 'GET',
             url: `${this.BASE_URL}/statistics/manga`,
             params: {
-                manga: apiData.data.map((manga: { id: string; }) => manga.id)
+                manga: Array.isArray(apiData.data) ? apiData.data.map((manga: { id: string }) => manga.id) : []
             },
             validateStatus: function (status) {
-                return status === 400 || (status >= 200 && status < 300); // Accept status codes 200-299 and 400
-            }});
-            let ratingAverage = {
-                "rating": {
-                    average: (await (tempR)).data.statistics[apiData.manga_id].rating.average
-                }
+                return status === 400 || (status >= 200 && status < 300);
             }
-let followers ={
-    "followers": {
-        "total": (await (tempR)).data.statistics[apiData.manga_id].followers.total
-    }
-}
-let comments ={
-    "comments": {
-        "total": (await (tempR)).data.statistics[apiData.manga_id].comments.repliesCount
-    }}
-    let ratingBayesian ={
-        "rating": {
-            "bayesian": (await (tempR)).data.statistics[apiData.manga_id].rating.bayesian
-        }
-    }
+        });
+
+    
+        const statistics = tempR?.data?.statistics?.[apiData.id] || {};
         return {
-            id: apiData.data.id,
+            id: apiData.id,
             defaultTitle: attributes.title.en || '',
             germanTitle: attributes.title.de ? [attributes.title.de] : [],
             originalTitle: attributes.title.jp ? [attributes.title.jp] : [],
@@ -237,7 +243,7 @@ let comments ={
             description: attributes.description.en || '',
             contentRating: attributes.contentRating || '',
             tags: attributes.tags.map((tag: any) => tag.attributes.name.en || ''),
-            ratingAverage: ratingAverage.rating.average || 0,
+            ratingAverage: statistics.rating?.average || 0,
             releaseDate: attributes.year || '',
             authors: relationships
                 .filter((rel: any) => rel.type === 'author')
@@ -246,17 +252,17 @@ let comments ={
                 .filter((rel: any) => rel.type === 'artist')
                 .map((artist: any) => artist.attributes.name),
             publicationStatus: attributes.status || '',
-            followers:followers.followers.total || 0,
-            commentCount:comments.comments.total || 0,
+            followers: statistics.followers || 0,
+            commentCount: statistics.comments?.repliesCount || 0,
             demographic: attributes.publicationDemographic || '',
             originalLanguage: attributes.originalLanguage || '',
             lastVolume: parseInt(attributes.lastVolume, 10) || 0,
             lastChapter: parseInt(attributes.lastChapter, 10) || 0,
-            ratingBayesian: ratingBayesian.rating.bayesian || 0,
+            ratingBayesian: statistics.rating?.bayesian || 0,
             availableTranslatedLanguages: availableTranslatedLanguages,
-
         };
     }
+    
     //verfügbare Sprache prüfen
     private checkGermanTranslationAvailable(mangaId: string, language: string): Observable<boolean> {
         return this.getManga_DexById(mangaId).pipe(
