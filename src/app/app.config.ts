@@ -19,7 +19,7 @@ export const appConfig: ApplicationConfig = {
     provideFirestore(() => getFirestore())
   ]
 };
-export const firebaseConfig = {
+ const firebaseConfig = {
   apiKey: "AIzaSyCUs2tS3Hl_4pVKenyZsf-Ule9OeSf11y8",
   authDomain: "manga-web-f2da8.firebaseapp.com",
   projectId: "manga-web-f2da8",

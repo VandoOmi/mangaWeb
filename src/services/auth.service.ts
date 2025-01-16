@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable, catchError, from, map, throwError} from 'r
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthService {
   firebaseAuth = inject(Auth);
   firestore = inject(Firestore);
@@ -29,7 +30,6 @@ export class AuthService {
       })
     );
   }
-
 
   getUserRole(uid: string) : Observable<UserRoleInterface> {
     const docRef = doc(this.firestore, 'user-role/', uid);
@@ -71,7 +71,7 @@ export class AuthService {
     return from(promise);
   }
 
-  removeAdminRole(user: UserRoleInterface): Observable<void> {7
+  removeAdminRole(user: UserRoleInterface): Observable<void> {
     user.role = 'user';
     return this.updateUserRole(user);
   }
@@ -91,8 +91,9 @@ export class AuthService {
       password
     ).then(
       (response) => {
-        this.addUserRole(response.user.uid!, 'user');
+        this.addUserRole(response.user, 'user');
         this.currentUser.next(response.user);
+        return updateProfile(response.user, {displayName: username});
       }
     );
 
@@ -106,8 +107,9 @@ export class AuthService {
       password
     ).then(
       (response) => {
-        this.addUserRole(response.user.uid!, 'admin');
+        this.addUserRole(response.user, 'admin');
         this.currentUser.next(response.user);
+        return updateProfile(response.user, {displayName: username});
       }
     );
 

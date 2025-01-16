@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { MangaBoxComponent, MangaBoxModule } from "./manga-box/manga-box.component";
-import { Manga, MangaService } from '../../../services/manga.service';
+import { Manga_Dex, MangaService } from '../../../services/manga.service';
 import { NgFor } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -18,15 +18,11 @@ export class ProductsComponent {
   openDetail() {
     this.router.navigateByUrl('detailManga');
   }
-  mangas: Manga[]=[];
-  selectedStyle: string = 'list'; 
+  mangas: Manga_Dex[] = [];
+  selectedStyle: string = 'list';
+
   constructor() {}
 
-  ngOnInit(): void {
-    /*this.mangaServ.getMangas().subscribe(mangalist => {
-      this.mangas = mangalist;
-    })*/
-  }
 
   apply(style: string): void {
     this.selectedStyle = style;

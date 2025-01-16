@@ -1,24 +1,24 @@
 <div class="header">
     <div class="left">
-        <a class="home" routerLink="'/home'">
-            <img class="logo" src="favicon.ico" alt="Logo">
+      <a routerLink="'/home'">
+          <img class="logo" src="favicon.ico" alt="Logo">
+      </a>
+      <a class="team" routerLink="/team">
+        Wer Sind Wir?
+      </a>
+      <a class="manga" routerLink="/products">
+          Mangas
+      </a>
+      @if (isCurrentUserAdmin) {
+        <a class="admin" routerLink="/admin">
+            Administation
         </a>
-        <a class="team" routerLink="/team">
-          Wer Sind Wir?
-        </a>
-        <a class="manga" routerLink="/products">
-            Mangas
-        </a>
-        @if (this.userRole === 'admin') {
-          <a class="admin" routerLink="/admin">
-              Administation
-          </a>
-        }
+      }
     </div>
     <div class="right">
       @if (this.user != null) {
-        <p>Willkommen {{userRole}}!</p>
-        <button class="logout-button" (click)="this.authServ.logout()">
+        <p>Willkommen {{displayname}}!</p>
+        <button class="logout-button" (click)="logout()">
           <p>Logout</p>
         </button>
       }

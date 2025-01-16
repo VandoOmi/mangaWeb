@@ -51,7 +51,15 @@
             font-size: 1.3rem;
         }
     }
-
+    .werSindWirSize{
+        width: 13rem;
+    }
+    .mangaSize{
+        width: 7rem;
+    }
+    .adminSize{
+        width: 13rem;
+    }
     a {
         color: rgba(61,58,109,255);
         text-decoration: none;
@@ -61,6 +69,7 @@
 
         &:hover {
             font-size: 1.52rem;
+            font-weight: bold;
         }
     }
 }
