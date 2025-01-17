@@ -2,7 +2,7 @@
     <div class="head box">
         <a class="tags tag" href="http://mangadex.org/title/{{this.manga.id}}"><img class="cover" src="https://og.mangadex.org/og-image/manga/{{this.manga.id}}" alt="Big Cover"></a>
         <div class="name" id="tags">
-            <p class="tags safe" *ngIf="this.manga.germanTitle.length > 0 && this.manga.originalTitle.length > 0">Alternate titles:</p>
+            <p class="tags safe" *ngIf="this.manga.germanTitle.length > 0 || this.manga.originalTitle.length > 0">Alternate titles:</p>
             @if (this.manga.germanTitle.length > 0) {
                 <p class="tag tags" *ngFor="let title of this.manga.germanTitle">{{title}}</p>
             }
@@ -21,7 +21,7 @@
                 @if (this.manga.publicationStatus == "ongoing") {
                     🟢 Publication: {{this.manga.releaseDate}} {{(this.manga.publicationStatus.charAt(0).toUpperCase() + this.manga.publicationStatus.slice(1))}}
                 }
-                @if (this.manga.publicationStatus == "hitaitus") {
+                @if (this.manga.publicationStatus == "hiatus") {
                     🟡 Publication: {{this.manga.releaseDate}} {{(this.manga.publicationStatus.charAt(0).toUpperCase() + this.manga.publicationStatus.slice(1))}}
                 }
                 @if (this.manga.publicationStatus == "cancelled") {

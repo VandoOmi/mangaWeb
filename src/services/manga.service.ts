@@ -258,12 +258,28 @@ export class MangaService {
             url: `${this.BASE_URL}/statistics/manga/${apiData.id}`
         });
 
+        let originalTitle = [];
+        let germanTitle = [];
+
+        for (let j = 0; j < attributes.altTitles.length; j++) {
+            const altTitles = attributes.altTitles[j];
+            if (altTitles.hasOwnProperty(attributes.originalLanguage)) {
+                originalTitle.push(altTitles[attributes.originalLanguage])
+            }
+            if (altTitles.hasOwnProperty('de')) {
+                germanTitle.push(altTitles.de)
+            }
+            if (altTitles.hasOwnProperty(`${attributes.originalLanguage}-ro`)) {
+                originalTitle.push(altTitles[`${attributes.originalLanguage}-ro`])
+            }
+        }
+
         const statistics = tempR?.data?.statistics?.[apiData.id] || {};
         const manga = {
             id: apiData.id,
             defaultTitle: attributes.title.en || '',
-            germanTitle: attributes.title.de ? [attributes.title.de] : [],
-            originalTitle: attributes.title.jp ? [attributes.title.jp] : [],
+            germanTitle: germanTitle,
+            originalTitle: originalTitle,
             currentCover: coverUrl,
             description: attributes.description.en || '',
             contentRating: attributes.contentRating || '',
