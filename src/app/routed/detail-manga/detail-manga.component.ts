@@ -1,14 +1,27 @@
-import { Component, Injectable, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Manga_Dex } from '../../../services/manga.service';
 import { NgFor, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-detail-manga',
   standalone: true,
-  imports: [NgFor, NgIf],
+  imports: [NgIf, NgFor],
   templateUrl: './detail-manga.component.html',
-  styleUrl: './detail-manga.component.scss'
+  styleUrls: ['./detail-manga.component.scss']
 })
-export class DetailMangaComponent {
-  @Input() manga!: Manga_Dex;
+export class DetailMangaComponent implements OnInit {
+  manga!: Manga_Dex;
+
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe(params => {
+      const mangaString = params.get('manga');
+      if (mangaString) {
+        this.manga = JSON.parse(mangaString);
+        console.log(this.manga)
+      }
+    });
+  }
 }

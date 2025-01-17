@@ -1,6 +1,8 @@
 <div [ngClass]="selectedStyle">
 
-    <img class="cover" src="{{this.manga.currentCover}}" alt="Manga Cover">
+    <button (click)="navigateToPage(manga)">
+        <img class="cover" src="{{this.manga.currentCover}}" alt="Manga Cover">
+    </button>
 
     @if (selectedStyle === 'list') {
         <div class="info">

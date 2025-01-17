@@ -277,7 +277,7 @@ export class MangaService {
                 .filter((rel: any) => rel.type === 'artist')
                 .map((artist: any) => artist.attributes?.name ?? ''),
             publicationStatus: attributes.status || '',
-            followers: statistics.followers || 0,
+            followers: statistics.follows || 0,
             commentCount: statistics.comments?.repliesCount || 0,
             demographic: attributes.publicationDemographic || '',
             originalLanguage: attributes.originalLanguage || '',

@@ -1,12 +1,14 @@
 <div class="list">
-    <div class="head box link">
+    <div class="head box">
         <a class="tags tag" href="http://mangadex.org/title/{{this.manga.id}}"><img class="cover" src="https://og.mangadex.org/og-image/manga/{{this.manga.id}}" alt="Big Cover"></a>
         <div class="name" id="tags">
-            <p class="tags safe">Alternate titles:</p>
+            <p class="tags safe" *ngIf="this.manga.germanTitle.length > 0 && this.manga.originalTitle.length > 0">Alternate titles:</p>
             @if (this.manga.germanTitle.length > 0) {
                 <p class="tag tags" *ngFor="let title of this.manga.germanTitle">{{title}}</p>
             }
-            <p class="tag tags" *ngFor="let title of this.manga.originalTitle">{{title}}</p>
+            @if (this.manga.originalTitle.length > 0) {
+                <p class="tag tags" *ngFor="let title of this.manga.originalTitle">{{title}}</p>
+            }
         </div>
     </div>
     <div class="subHead box">
@@ -64,3 +66,27 @@
         <a class="tags tag" href="http://mangadex.org/title/{{this.manga.id}}">Read on MangaDex</a>
     </div>
 </div>
+
+<!-- export interface Manga_Dex {
+    id: string;
+    defaultTitle: string;
+    germanTitle: string[];
+    originalTitle: string[];
+    currentCover: string;
+    description: string;
+    contentRating: string;
+    tags: string[];
+    ratingAverage: number;
+    releaseDate: string;
+    authors: string[];
+    artists: string[];
+    publicationStatus: string;
+    followers: number;
+    commentCount: number;
+    demographic: string;
+    originalLanguage: string;
+    lastVolume: number;
+    lastChapter: number;
+    ratingBayesian: number;
+    availableTranslatedLanguages: string[];
+}; -->
